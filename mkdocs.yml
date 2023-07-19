@@ -1,0 +1,14 @@
+site_name: Freemocap x NIH Balance Analysis Documentation
+
+theme: 
+    name: lux
+    nav_style: dark
+
+nav:
+    - Home: 'index.md'
+    - Overview: 'overview.md'
+    - Methods: 'methods.md'
+
+
+extra_css:
+    - 'css/custom.css'
