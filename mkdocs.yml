@@ -12,3 +12,5 @@ nav:
 
 extra_css:
     - 'css/custom.css'
+
+repo_url: https://github.com/aaroncherian/nih_balance_analyses
