@@ -20,13 +20,3 @@ h3 {
 }
 
 
-html {
-    font-size: 150%; /* Adjust to desired size */
-    scroll-behavior: smooth;
-}
-
-.container {
-    max-width: 65%; /* Adjust to your preferred width */
-}
-
-
