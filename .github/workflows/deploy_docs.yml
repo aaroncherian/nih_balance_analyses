@@ -1,0 +1,16 @@
+site_name: Freemocap/NIH Balance Analysis Documentation
+
+theme: 
+    name: lux
+    nav_style: dark
+
+nav:
+    - Home: 'index.md'
+    - Overview: 'overview.md'
+    - Methods: 'methods.md'
+
+
+extra_css:
+    - 'css/custom.css'
+
+repo_url: https://github.com/aaroncherian/nih_balance_analyses
