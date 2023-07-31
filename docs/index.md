@@ -7,8 +7,6 @@ This page documents our validation of the FreeMoCap system on the NIH Balance As
 Your browser does not support the video tag.
 </video> 
 
-<iframe width="1100" height="800" frameborder="0" scrolling="no" src="images\com_dispersion_plots.html" ></iframe>
-
 ##  Overview 
 Patient balance and progress in rehabilitation is often measured using comprehensive  **qualitative** assessments. However, these tests 
 tend to be **subjective** and may not be responsive to small changes in a patient. The ability to capture human movement data while 

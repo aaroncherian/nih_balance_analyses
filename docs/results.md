@@ -12,3 +12,9 @@ Center of mass path length shows a generally increasing trend across stances.
 
 <iframe width="700" height="650" frameborder="0" scrolling="no" src='../images/path_length_line_plots.html'> </iframe>
 
+### NIH Toolbox Ratio
+
+The NIH Toolbox app compares the Eyes Closed, Solid Ground condition to the Eyes Closed, Foam Pad condition by providing the ratio of each of these scores over the Eyes Open, Solid Ground condition score as a baseline. The closer the ratio is to 1, the less postural sway the subject was showing. 
+
+<iframe width="700" height="650" frameborder="0" scrolling="no" src='../images/nih_ratio_plots.html'> </iframe>
+
