@@ -1,0 +1,8 @@
+mkdocs-bootswatch
+matplotlib
+numpy
+pandas
+opencv-python
+pyqt6
+rich
+seaborn
