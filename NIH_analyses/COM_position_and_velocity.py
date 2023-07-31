@@ -1,4 +1,6 @@
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 import numpy as np
 import json
 from pathlib import Path
@@ -14,9 +16,6 @@ sessionIDs = ['sesh_2023-05-17_14_40_56_MDN_NIH_Trial2']
 
 colors = ['blue', 'green', 'red']
 dimensions = ['X', 'Y', 'Z']
-
-# Create a figure and subplots
-fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 10), sharex=True)
 
 # For each session, load data and plot
 for j, sessionID in enumerate(sessionIDs):
@@ -37,26 +36,35 @@ for j, sessionID in enumerate(sessionIDs):
     frame_intervals = condition_data["Frame Intervals"]["Eyes Open/Solid Ground"]
     start_frame, end_frame = frame_intervals
 
+    # Create a figure with subplots
+    fig = make_subplots(rows=2, cols=2, shared_xaxes=True, 
+                    subplot_titles=("COM X Position", "COM Y Position", "COM X Velocity", "COM Y Velocity"))
+
+
     # Extract the x, y data for the given frames
     for i in range(2):
         # Position
         pos_data = com_data[100:10000, i]
-        axes[0, i].plot(pos_data, label=f'{dimensions[i]} Position', color=colors[i])
-        axes[0, i].set_xlabel('Frame #')
-        axes[0, i].set_ylabel('Position (mm)')
-        axes[0, i].set_title(f'Trial {j+1} COM {dimensions[i]} Position ')
-        axes[0, i].legend(loc='upper left')
-        
+        fig.add_trace(go.Scatter(y=pos_data, mode='lines', line=dict(color=colors[i]), name=f'{dimensions[i]} Position'), row=1, col=i+1)
         # Velocity
         vel_data = np.diff(com_data[100:10000, i])
-        axes[1, i].plot(vel_data, label=f'{dimensions[i]} Velocity', color=colors[i])
-        axes[1, i].set_xlabel('Frame #')
-        axes[1, i].set_ylabel('Velocity (mm/frame)')
-        axes[1, i].set_title(f'Trial {j+1} COM {dimensions[i]} Velocity')
-        axes[1, i].legend(loc='upper left')
+        fig.add_trace(go.Scatter(y=vel_data, mode='lines', line=dict(color=colors[i]), name=f'{dimensions[i]} Velocity'), row=2, col=i+1)
 
-# Tight layout for better spacing
-plt.tight_layout()
+    # Update axes labels and titles
+    for i in range(2):
+        # fig.update_xaxes(title_text='Frame #', row=1, col=i+1)
+        fig.update_yaxes(title_text='Position (mm)', row=1, col=i+1)
+        fig.update_xaxes(title_text='Frame #', row=2, col=i+1)
+        fig.update_yaxes(title_text='Velocity (mm/frame)', row=2, col=i+1)
 
-# Show plot
-plt.show()
+    # Update subplot titles
+    fig.update_layout(
+        title=f'Trial {j+1} COM',
+        showlegend=False,
+        template='plotly_white'
+    )
+
+    # Show plot
+fig.show()
+
+fig.write_html(str(r'C:\Users\aaron\Documents\GitHub\nih_balance_analyses\docs\images\com_position_and_velocity.html'), full_html=False, include_plotlyjs='cdn')
