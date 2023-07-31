@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
 
-matplotlib.use("Qt5Agg")
+matplotlib.use("TkAgg")
 
 path_to_freemocap_analysis_folder = Path(r'D:\2023-05-17_MDN_NIH_data\1.0_recordings\calib_3\sesh_2023-05-17_14_53_48_MDN_NIH_Trial3\data_analysis\analysis_2023-06-01_10_12_24')
 path_to_qualisys_analysis_folder = Path(r'D:\2023-05-17_MDN_NIH_data\1.0_recordings\calib_3\qualisys_MDN_NIH_Trial3\data_analysis\analysis_2023-06-01_17_14_40')
@@ -45,4 +45,4 @@ for dimension in ['x', 'y', 'z']:
 
     plt.show()
 
-    fig.savefig(path_to_freemocap_analysis_folder / f'combined_violin_plot_{dimension}.png')
+    # fig.savefig(path_to_freemocap_analysis_folder / f'combined_violin_plot_{dimension}.png')

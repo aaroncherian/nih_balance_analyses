@@ -5,4 +5,6 @@ pandas
 opencv-python
 pyqt6
 rich
+plotly
 seaborn
+
