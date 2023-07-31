@@ -1,12 +1,5 @@
-import matplotlib
-matplotlib.use("Qt5Agg")
-import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
-from pathlib import Path
-import json
-import numpy as np
-import seaborn as sns
+import plotly.graph_objects as go
 
 def aggregate_path_lengths(trials):
   
@@ -18,42 +11,40 @@ def aggregate_path_lengths(trials):
     return trials_mean, trials_std, trials_dataframe
 
 # Example usage
-
-
-trial_1 = {'Condition 2/Condition 1':.71, 'Condition 4/Condition 1':2.34}
-trial_2 = {'Condition 2/Condition 1':1.12, 'Condition 4/Condition 1':3.79}
-trial_3 = {'Condition 2/Condition 1':1.26, 'Condition 4/Condition 1':3.16}
+trial_1 = {'Eyes Closed, Solid Ground/Eyes Open, Solid Ground':.71, 'Eyes Closed, Foam Pad/Eyes Open, Solid Ground':2.34}
+trial_2 = {'Eyes Closed, Solid Ground/Eyes Open, Solid Ground':1.12, 'Eyes Closed, Foam Pad/Eyes Open, Solid Ground':3.79}
+trial_3 = {'Eyes Closed, Solid Ground/Eyes Open, Solid Ground':1.26, 'Eyes Closed, Foam Pad/Eyes Open, Solid Ground':3.16}
 
 trial_data = [trial_1, trial_2, trial_3]
 
 trials_mean, trials_std, trials_dataframe = aggregate_path_lengths(trial_data)
 
 # Conditions
-
 conditions = trials_dataframe.columns
 
-# Create figure with subplots
-fig, ax = plt.subplots(1, 1, figsize=(10, 8), sharex=True)
+# Create a plotly figure
+fig = go.Figure()
 
-# Plotting Freemocap data
+# Plotting individual trials
 for index, row in trials_dataframe.iterrows():
-    ax.plot(conditions, row, '-o', color='#72117c', alpha=0.6)
+    fig.add_trace(go.Scatter(x=conditions, y=row, mode='lines+markers', line=dict(color='#72117c'), opacity=0.6))
 
-# Adding Freemocap mean and error bars
-ax.errorbar(conditions, trials_mean, yerr=trials_std, fmt='-o', color='black', capsize=5, label='Mean')
+# Adding mean and error bars
+fig.add_trace(go.Scatter(x=conditions, y=trials_mean, mode='lines+markers', line=dict(color='black'), error_y=dict(type='data', array=trials_std), name='Mean'))
 
-# Labels and titles for Freemocap
-# ax.set_title('Freemocap')
-ax.set_ylabel('Ratio Score', fontsize=12)
-ax.set_xlabel('Condition Ratio', fontsize=12)
-ax.legend(loc = 'upper left')
-plt.xticks(fontsize=12)
-
-# axs[0].set_ylim([0, .6])
-
-
-fig.suptitle('NIH Toolbox Ratio Scores', fontsize=16)
+# Labels and titles
+fig.update_layout(
+    height = 600,
+    width = 700,
+    title='NIH Toolbox Ratio Scores',
+    xaxis_title='Condition Ratio',
+    yaxis_title='Ratio Score',
+    font=dict(size=12),
+    showlegend=False,
+    template = 'plotly_white'
+)
 
 # Display the plot
-plt.tight_layout()
-plt.show()
+fig.show()
+
+fig.write_html(str(r'C:\Users\aaron\Documents\GitHub\nih_balance_analyses\docs\images\nih_ratio_plots.html'), full_html=False, include_plotlyjs='cdn')
