@@ -18,3 +18,9 @@ The NIH Toolbox app compares the Eyes Closed, Solid Ground condition to the Eyes
 
 <iframe width="700" height="650" frameborder="0" scrolling="no" src='../images/nih_ratio_plots.html'> </iframe>
 
+
+### COM Position and Velocity
+
+COM position and velocity can also be plotted for an individual trial.
+
+<iframe width="1000" height="800" frameborder="0" scrolling="no" src='../images/com_position_and_velocity.html'> </iframe>
