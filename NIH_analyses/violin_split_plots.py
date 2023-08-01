@@ -54,8 +54,7 @@ for dimension in ['x', 'y', 'z']:
 
     # Update traces and layout
     fig.update_traces(box_visible=True, meanline_visible=True,
-                      points='all',  # show all points
-                      jitter=0.05,   # add some jitter on points for better visibility
+                      points=False,  # show all points
                       scalemode='count')  # scale violin plot area with total count
     fig.update_layout(title=f'COM {dimension.upper()} Velocity vs. Condition',
                       template='plotly_white')
