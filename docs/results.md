@@ -24,3 +24,10 @@ The NIH Toolbox app compares the Eyes Closed, Solid Ground condition to the Eyes
 COM position and velocity can also be plotted for an individual trial.
 
 <iframe width="1000" height="800" frameborder="0" scrolling="no" src='../images/com_position_and_velocity.html'> </iframe>
+
+
+### COM Velocity Distribution
+
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_x.html'> </iframe>
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_y.html'> </iframe>
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_z.html'> </iframe>
