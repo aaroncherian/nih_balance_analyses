@@ -41,8 +41,12 @@ class BalanceAssessmentWidget(QWidget):
     def set_conditions_frames_dictionary(self, condition_frames_dictionary:dict):
         self.condition_frames_dictionary = condition_frames_dictionary
 
+    def set_center_of_mass_data(self, com_data):
+        """Set the center of mass data for the widget."""
+        self.total_body_COM_data = com_data
+
     def run_COM_analysis(self):
-        self.total_body_COM_data = self.load_COM_data(self.path_to_session_folder)
+        # self.total_body_COM_data = self.load_COM_data(self.path_to_session_folder)  # Data is now pre-loaded
         self.path_length_calculator = PathLengthCalculator.PathLengthCalculator(self.total_body_COM_data)
         self.path_length_dictionary = self.calculate_path_lengths(self.condition_frames_dictionary)
         # self.save_condition_path_lengths(path_length_dictionary, self.path_to_data_analysis_folder)
@@ -51,11 +55,7 @@ class BalanceAssessmentWidget(QWidget):
         self.run_button_clicked_signal.emit()
         f = 2
 
-    def load_COM_data(self, path_to_session_folder:Path):
-        loaded_freemocap_data = FreeMoCapDataLoader(path_to_session_folder)
-        total_body_COM_data = loaded_freemocap_data.load_total_body_COM_data()
-
-        return total_body_COM_data
+    
 
     def calculate_path_lengths(self, condition_dictionary):
         path_length_dictionary = {}
