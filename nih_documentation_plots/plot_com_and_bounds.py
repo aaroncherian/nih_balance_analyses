@@ -4,6 +4,9 @@ import json
 from pathlib import Path 
 from freemocap_utils.mediapipe_skeleton_builder import mediapipe_indices
 
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 
 class FileManager:
     def __init__(self, path_to_session_folder, path_to_data_analysis):
@@ -57,16 +60,14 @@ class COM_2D_Plotter:
         self.marker_data_sliced, self.com_data_sliced = self.file_manager.load_condition_slices(path_to_data_analysis)
 
     def create_2D_COM_plot(self, mediapipe_indices):
-        fig, axs = plt.subplots(1, 4, figsize=(20, 6), sharey=True)
-
         # List of conditions for indexing
         conditions = ['Eyes Open/Solid Ground', 'Eyes Closed/Solid Ground', 'Eyes Open/Foam', 'Eyes Closed/Foam']
 
         ax_range = 165  # Set the range for each axis
 
-        for i, ax in enumerate(axs):
-            condition = conditions[i]
+        fig = make_subplots(rows=2, cols=2, subplot_titles=conditions, shared_yaxes=False)
 
+        for i, condition in enumerate(conditions):
             # Get COM and marker data for the current condition
             com_data = self.com_data_sliced[condition]
             marker_data = self.marker_data_sliced[condition]
@@ -96,31 +97,29 @@ class COM_2D_Plotter:
             ref_point_y = (left_heel_y + right_heel_y + left_foot_y + right_foot_y) / 4
 
             # Plot COM as a line with transparency
-            ax.plot(com_x, com_y, color='black', alpha=0.5, label='COM')
+            fig.add_trace(go.Scatter(x=com_x, y=com_y, mode='lines', name='COM', line=dict(color='black', width=1), opacity=0.5, showlegend=(i==0)), row=i//2+1, col=i%2+1)
 
             # Plot average foot positions
-            ax.plot([left_heel_x, left_foot_x], [left_heel_y, left_foot_y], color='blue', label='Left Foot', marker = '.')
-            ax.plot([right_heel_x, right_foot_x], [right_heel_y, right_foot_y], color='red', label='Right Foot', marker = '.')
+            fig.add_trace(go.Scatter(x=[left_heel_x, left_foot_x], y=[left_heel_y, left_foot_y], mode='lines+markers', name='Left Foot', line=dict(color='blue', width=1), showlegend=(i==0)),  row=i//2+1, col=i%2+1)
+            fig.add_trace(go.Scatter(x=[right_heel_x, right_foot_x], y=[right_heel_y, right_foot_y], mode='lines+markers', name='Right Foot', line=dict(color='red', width=1), showlegend=(i==0)),  row=i//2+1, col=i%2+1)
 
             # Set axis range using the average foot position as reference point
-            ax.set_xlim([ref_point_x - ax_range, ref_point_x + ax_range])
-            ax.set_ylim([ref_point_y - ax_range, ref_point_y + ax_range])
+            fig.update_xaxes(range=[ref_point_x - ax_range, ref_point_x + ax_range],  row=i//2+1, col=i%2+1)
+            fig.update_yaxes(range=[ref_point_y - ax_range, ref_point_y + ax_range],  row=i//2+1, col=i%2+1)
 
-            # Set axis labels
-            ax.set_xlabel('X-Axis (mm)', fontsize = 14)
-            if i == 0:
-                ax.set_ylabel('Y-Axis (mm)', fontsize = 14)
-   
-            ax.set_title(condition)
+        fig.update_yaxes(title_text = 'Y Axis (mm)', row=1, col=1)
+        fig.update_yaxes(title_text = 'Y Axis (mm)', row=2, col=1)
 
-        # Create a legend for the figure
-        handles, labels = ax.get_legend_handles_labels()
-        fig.legend(handles, labels, loc='upper left')
-        fig.suptitle('Center of Mass (COM) Trajectory and Foot Positions')
+        fig.update_xaxes(title_text = 'X Axis (mm)', row=2, col=1)
+        fig.update_xaxes(title_text = 'X Axis (mm)', row=2, col=2)
 
-        plt.tight_layout()
-        plt.show()
-        self.file_manager.save_figure(fig, "com_dispersion_plots.png")
+
+        fig.update_layout(title_text="Center of Mass (COM) Trajectory and Foot Positions", width = 650, height = 650, showlegend=True, yaxis_scaleanchor="x", template="plotly_white",)
+
+        # Save the plot as an HTML file
+        # fig.write_html(str(self.file_manager.path_to_data_analysis / "com_dispersion_plots.html"))
+        # fig.write_html(str(r'C:\Users\aaron\Documents\GitHub\nih_balance_analyses\docs\images\com_dispersion_plots.html'))
+        fig.show()
 
 
 if __name__ == "__main__":

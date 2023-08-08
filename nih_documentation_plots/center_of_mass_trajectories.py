@@ -10,13 +10,17 @@ center_of_mass_folder = 'center_of_mass'
 total_body_com_file = 'total_body_center_of_mass_xyz.npy'
 analysis_folder = 'data_analysis'
 
+# sessionIDs = ['sesh_2023-05-17_14_40_56_MDN_NIH_Trial2', 'sesh_2023-05-17_14_53_48_MDN_NIH_Trial3', 'sesh_2023-05-17_15_03_20_MDN_NIH_Trial4']
 sessionIDs = ['sesh_2023-05-17_14_40_56_MDN_NIH_Trial2']
-
+# Define colors for X, Y, Z
 colors = ['blue', 'green', 'red']
 dimensions = ['X', 'Y', 'Z']
 
 # Create a figure and subplots
-fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 10), sharex=True)
+fig, axes = plt.subplots(nrows=2, ncols=len(sessionIDs), figsize=(15, 10))
+
+# Axis range
+ax_range = 2
 
 # For each session, load data and plot
 for j, sessionID in enumerate(sessionIDs):
@@ -29,7 +33,7 @@ for j, sessionID in enumerate(sessionIDs):
     if not analysis_subfolders:
         print(f"No analysis subfolders found for session {sessionID}")
         continue
-    condition_json_path = analysis_subfolders[-1] / 'condition_data.json'
+    condition_json_path = analysis_subfolders[-1] / 'condition_data.json' # Using the latest analysis folder
     with open(condition_json_path, 'r') as file:
         condition_data = json.load(file)
     
@@ -37,23 +41,18 @@ for j, sessionID in enumerate(sessionIDs):
     frame_intervals = condition_data["Frame Intervals"]["Eyes Open/Solid Ground"]
     start_frame, end_frame = frame_intervals
 
-    # Extract the x, y data for the given frames
+    # Extract the x, y, and z data for the given frames
     for i in range(2):
-        # Position
-        pos_data = com_data[100:10000, i]
-        axes[0, i].plot(pos_data, label=f'{dimensions[i]} Position', color=colors[i])
-        axes[0, i].set_xlabel('Frame #')
-        axes[0, i].set_ylabel('Position (mm)')
-        axes[0, i].set_title(f'Trial {j+1} COM {dimensions[i]} Position ')
-        axes[0, i].legend(loc='upper left')
+        data = np.diff(com_data[start_frame:end_frame, i])
+        mean_val = np.mean(data)
+        axes[i].plot(data, label=f'{dimensions[i]} Trajectory', color=colors[i])
+        axes[i].set_xlabel('Frame #')
+        axes[i].set_ylabel('Velocity (mm/frame)')
+        axes[i].set_title(f'Trial {j+1} COM {dimensions[i]} Velocity During Eyes Open/Solid Ground')
+        axes[i].legend(loc = 'upper left')
         
-        # Velocity
-        vel_data = np.diff(com_data[100:10000, i])
-        axes[1, i].plot(vel_data, label=f'{dimensions[i]} Velocity', color=colors[i])
-        axes[1, i].set_xlabel('Frame #')
-        axes[1, i].set_ylabel('Velocity (mm/frame)')
-        axes[1, i].set_title(f'Trial {j+1} COM {dimensions[i]} Velocity')
-        axes[1, i].legend(loc='upper left')
+        # Set y limits based on mean value and a fixed range
+        axes[i].set_ylim(mean_val - ax_range, mean_val + ax_range)
 
 # Tight layout for better spacing
 plt.tight_layout()
