@@ -1,5 +1,5 @@
 import threading
-from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import PathLengthCalculator
+from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import path_length_calculator
 import numpy as np
 
 
@@ -16,7 +16,7 @@ class BalanceAssessmentWorkerThread(threading.Thread):
         # Data and parameters
         self.com_data = com_data
         self.condition_frames_dictionary = condition_frames_dictionary
-        self.path_length_calculator = PathLengthCalculator.PathLengthCalculator(self.com_data)
+        self.path_length_calculator = path_length_calculator.PathLengthCalculator(self.com_data)
 
         # Define available tasks
         self.available_tasks = {
