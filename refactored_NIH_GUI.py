@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBo
 
 from freemocap_utils.GUI_widgets.skeleton_view_widget import SkeletonViewWidget
 from freemocap_utils.GUI_widgets.slider_widget import FrameCountSlider
-from freemocap_utils.GUI_widgets.video_capture_widget import VideoCapture
+from freemocap_utils.GUI_widgets.video_capture_widget import VideoDisplay
 from freemocap_utils.GUI_widgets.NIH_widgets.frame_marking_widget import FrameMarker
 from freemocap_utils.GUI_widgets.NIH_widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
 from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import BalanceAssessmentWidget
@@ -58,57 +58,43 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("My App")
 
         layout = QVBoxLayout()
-
         widget = QWidget()
 
         self.file_manager = FileManager()
 
         slider_and_skeleton_layout = QVBoxLayout()
 
-        session_load_groupbox = self.create_session_load_groupbox()
-        layout.addWidget(session_load_groupbox)
+        self.load_session_groupbox = self.create_load_session_groupbox()
+        slider_and_skeleton_layout.addWidget(self.load_session_groupbox)
 
-        self.frame_count_slider = FrameCountSlider()
-        slider_and_skeleton_layout.addWidget(self.frame_count_slider)
+        self.skeleton_viewer_groupbox = self.create_skeleton_viewer_groupbox()
+        slider_and_skeleton_layout.addWidget(self.skeleton_viewer_groupbox)
 
-        self.skeleton_view_widget = SkeletonViewWidget()
-        self.skeleton_view_widget.setFixedSize(self.skeleton_view_widget.size())
-        slider_and_skeleton_layout.addWidget(self.skeleton_view_widget)
-        
-        self.camera_view_widget = VideoCapture()
+        self.camera_view_groupbox = self.create_camera_view_groupbox()
+        self.frame_marking_groupbox = self.create_frame_marking_groupbox()
+        self.balance_assessment_groupbox = self.create_balance_assessment_groupbox()
+        self.saving_data_groupbox = self.create_saving_data_groupbox()
 
-        self.camera_view_widget.setFixedSize(self.skeleton_view_widget.size())
+        main_layout = QHBoxLayout()
+        main_layout.addLayout(slider_and_skeleton_layout)
+        main_layout.addWidget(self.camera_view_groupbox)
 
-        skeleton_plot_and_video_layout = QHBoxLayout()
-        skeleton_plot_and_video_layout.addLayout(slider_and_skeleton_layout)
-        skeleton_plot_and_video_layout.addWidget(self.camera_view_widget)
-
-        layout.addLayout(skeleton_plot_and_video_layout)
-
-        self.frame_marking_widget = FrameMarker()
-        layout.addWidget(self.frame_marking_widget)
-        self.frame_marking_widget.setFixedSize(640,200)
-
-        self.balance_assessment_widget = BalanceAssessmentWidget()
-        layout.addWidget(self.balance_assessment_widget)
-
-        self.saving_data_widget = SavingDataAnalysisWidget()
-        layout.addWidget(self.saving_data_widget)
+        layout.addLayout(main_layout)
+        layout.addWidget(self.frame_marking_groupbox)
+        layout.addWidget(self.balance_assessment_groupbox)
+        layout.addWidget(self.saving_data_groupbox)
 
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
         self.connect_signals_to_slots()
 
-        # self.setFixedSize(layout.sizeHint())
-
     def connect_signals_to_slots(self):
-        self.frame_count_slider.slider.valueChanged.connect(lambda: self.skeleton_view_widget.replot(self.frame_count_slider.slider.value()))
+        self.frame_count_slider.slider.valueChanged.connect(self.handle_slider_value_changed)
+        self.camera_view_widget.video_loader.video_loaded_signal.connect(self.set_video_to_slider_frame)
 
         self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.saving_data_widget.set_conditions_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
         self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.balance_assessment_widget.set_conditions_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
-
-        self.frame_count_slider.slider.valueChanged.connect(lambda: self.camera_view_widget.set_frame(self.frame_count_slider.slider.value()) if (self.camera_view_widget.video_loader.video_is_loaded) else NotImplemented)
         
         self.balance_assessment_widget.run_button_clicked_signal.connect(self.show_histograms)
         self.balance_assessment_widget.run_button_clicked_signal.connect(lambda: self.saving_data_widget.set_conditions_path_length_dictionary(self.balance_assessment_widget.path_length_dictionary))
@@ -119,7 +105,18 @@ class MainWindow(QMainWindow):
         self.frame_count_slider.set_slider_range(self.num_frames)
         self.enable_buttons()
         self.set_session_folder_path()
-        
+
+    def handle_slider_value_changed(self):
+        self.skeleton_view_widget.replot(self.frame_count_slider.slider.value())
+        if self.camera_view_widget.video_loader.video_is_loaded:
+            current_frame = self.frame_count_slider.slider.value()
+            self.camera_view_widget.set_frame(current_frame)
+
+
+    def set_video_to_slider_frame(self):
+        current_frame = self.frame_count_slider.slider.value()
+        self.camera_view_widget.set_frame(current_frame)
+
     def open_folder_dialog(self):
         self.session_folder_path = self.file_manager.get_existing_directory("Choose a session")
 
@@ -173,24 +170,69 @@ class MainWindow(QMainWindow):
         self.window = HistogramWindow(self.balance_assessment_widget.velocity_dictionary)
         self.window.show()
 
-    def create_session_load_groupbox(self):
-        groupbox = QGroupBox("Load Session")
-        load_layout = QVBoxLayout()
-
-        self.freemocap_radio = QRadioButton("Freemocap")
-        self.qualisys_radio = QRadioButton("Qualisys")
+    def create_load_session_groupbox(self):
+        groupbox = QGroupBox("Load a Session")
+        load_session_layout = QVBoxLayout()
+        self.folder_open_button = QPushButton('Load a session folder', self)
+        self.folder_open_button.clicked.connect(self.open_folder_dialog)
+        load_session_layout.addWidget(self.folder_open_button)
+        self.freemocap_radio = QRadioButton('Load FreeMoCap Data')
         self.freemocap_radio.setChecked(True)
-
-        load_layout.addWidget(self.freemocap_radio)
-        load_layout.addWidget(self.qualisys_radio)
-
-        load_button = QPushButton("Load Session")
-        load_button.clicked.connect(self.open_folder_dialog)
-        load_layout.addWidget(load_button)
-
-        groupbox.setLayout(load_layout)
+        load_session_layout.addWidget(self.freemocap_radio)
+        self.qualisys_radio = QRadioButton('Load Qualisys Data')
+        load_session_layout.addWidget(self.qualisys_radio)
+        groupbox.setLayout(load_session_layout)
+        return groupbox
+    
+    def create_skeleton_viewer_groupbox(self):
+        
+        groupbox = QGroupBox("View Skeleton")
+        view_skeleton_layout = QVBoxLayout()
+        self.frame_count_slider = FrameCountSlider()
+        view_skeleton_layout.addWidget(self.frame_count_slider)
+        self.skeleton_view_widget = SkeletonViewWidget()
+        self.skeleton_view_widget.setFixedSize(self.skeleton_view_widget.size())
+        view_skeleton_layout.addWidget(self.skeleton_view_widget)
+        
+        groupbox.setLayout(view_skeleton_layout)
 
         return groupbox
+
+    def create_camera_view_groupbox(self):
+        groupbox = QGroupBox("Load a Video")
+        layout = QVBoxLayout()
+        self.camera_view_widget = VideoDisplay()
+        self.camera_view_widget.setFixedSize(self.skeleton_view_widget.size())
+        layout.addWidget(self.camera_view_widget)
+        groupbox.setLayout(layout)
+        return groupbox
+
+    def create_frame_marking_groupbox(self):
+        groupbox = QGroupBox("Annotate Frames for Conditions")
+        layout = QVBoxLayout()
+        self.frame_marking_widget = FrameMarker()
+        self.frame_marking_widget.setFixedSize(640,200)
+        layout.addWidget(self.frame_marking_widget)
+        groupbox.setLayout(layout)
+        return groupbox
+
+    def create_balance_assessment_groupbox(self):
+        groupbox = QGroupBox("Run Balance Assessment")
+        layout = QVBoxLayout()
+        self.balance_assessment_widget = BalanceAssessmentWidget()
+        layout.addWidget(self.balance_assessment_widget)
+        groupbox.setLayout(layout)
+        return groupbox
+
+    def create_saving_data_groupbox(self):
+        groupbox = QGroupBox("Save Data")
+        layout = QVBoxLayout()
+        self.saving_data_widget = SavingDataAnalysisWidget()
+        layout.addWidget(self.saving_data_widget)
+        groupbox.setLayout(layout)
+        return groupbox
+
+
 
 
 
