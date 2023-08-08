@@ -2,8 +2,21 @@ import threading
 from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import path_length_calculator
 import numpy as np
 
-
 class BalanceAssessmentWorkerThread(threading.Thread):
+    """
+    A thread to perform balance assessment tasks such as calculating path lengths and velocities.
+
+    Attributes:
+        com_data (np.ndarray): 3d total body center of mass data.
+        condition_frames_dictionary (dict): Dictionary containing condition names and their corresponding frame ranges.
+        path_length_calculator (PathLengthCalculator): An instance of the path length calculator tool.
+        available_tasks (dict): Dictionary of task names mapped to their respective function handlers.
+        tasks (dict): Dictionary of tasks to run with their results.
+        task_running_callback (function): Callback function to indicate a task has started.
+        task_completed_callback (function): Callback function to indicate a task has completed.
+        all_tasks_finished_callback (function): Callback function to indicate all tasks have finished.
+    """
+
     def __init__(self, 
                  com_data: np.ndarray, 
                  condition_frames_dictionary: dict, 
@@ -11,28 +24,27 @@ class BalanceAssessmentWorkerThread(threading.Thread):
                  task_running_callback=None, 
                  task_completed_callback=None, 
                  all_tasks_finished_callback=None):
+
         super().__init__()
 
-        # Data and parameters
         self.com_data = com_data
         self.condition_frames_dictionary = condition_frames_dictionary
         self.path_length_calculator = path_length_calculator.PathLengthCalculator(self.com_data)
 
-        # Define available tasks
         self.available_tasks = {
             'calculate_path_lengths': self.calculate_path_lengths,
             'calculate_velocities': self.calculate_velocities,
         }
         
-        # Initialize tasks based on provided task list
         self.tasks = {task_name: {'function': self.available_tasks[task_name], 'result': None} for task_name in task_list}
-
-        # Callbacks
         self.task_running_callback = task_running_callback
         self.task_completed_callback = task_completed_callback
         self.all_tasks_finished_callback = all_tasks_finished_callback
 
     def run(self):
+        """
+        Overrides the threading.Thread run method. Executes the tasks and manages the callbacks.
+        """
         for task_name, task_info in self.tasks.items():
             if self.task_running_callback:
                 self.task_running_callback(task_name)
@@ -40,13 +52,23 @@ class BalanceAssessmentWorkerThread(threading.Thread):
             is_completed, result = task_info['function']()
             task_info['result'] = result
 
+            
             if self.task_completed_callback:
-                self.task_completed_callback(task_name, result)
+                if is_completed:
+                    self.task_completed_callback(task_name, result)
+                else:
+                    self.task_completed_callback(task_name, None)
 
         if self.all_tasks_finished_callback:
             self.all_tasks_finished_callback(self.tasks)
 
     def calculate_path_lengths(self):
+        """
+        Calculate the path lengths for each condition.
+
+        Returns:
+            tuple: A tuple containing a boolean indicating successful completion and a dictionary of the center of mass path length for each condition.
+        """
         path_length_dictionary = {}
         for condition, frames in self.condition_frames_dictionary.items():
             frame_range = range(frames[0], frames[1])
@@ -55,6 +77,12 @@ class BalanceAssessmentWorkerThread(threading.Thread):
         return True, path_length_dictionary
 
     def calculate_velocities(self):
+        """
+        Calculate the velocities for each condition.
+
+        Returns:
+            tuple: A tuple containing a boolean indicating successful completion and dictionary of the center of mass velocity values during each condition.
+        """
         velocity_dictionary = {}
         for condition, frames in self.condition_frames_dictionary.items():
             frame_range = range(frames[0], frames[1])
