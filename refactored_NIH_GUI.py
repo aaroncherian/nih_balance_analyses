@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
     def set_session_folder_path(self):
         self.camera_view_widget.video_loader.set_session_folder_path(self.session_folder_path)
         self.saving_data_widget.set_session_folder_path(self.session_folder_path)
-        self.balance_assessment_widget.set_session_folder_path(self.session_folder_path)
+        # self.balance_assessment_widget.set_session_folder_path(self.session_folder_path)
     
     def enable_buttons(self):
         self.balance_assessment_widget.run_path_length_analysis_button.setEnabled(True)
@@ -184,7 +184,7 @@ class MainWindow(QMainWindow):
         self.folder_open_button.clicked.connect(self.open_folder_dialog)
         load_session_layout.addWidget(self.folder_open_button)
         groupbox.setLayout(load_session_layout)
-        
+
         return groupbox
     
     def create_skeleton_viewer_groupbox(self):
