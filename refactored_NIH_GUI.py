@@ -173,15 +173,18 @@ class MainWindow(QMainWindow):
     def create_load_session_groupbox(self):
         groupbox = QGroupBox("Load a Session")
         load_session_layout = QVBoxLayout()
-        self.folder_open_button = QPushButton('Load a session folder', self)
-        self.folder_open_button.clicked.connect(self.open_folder_dialog)
-        load_session_layout.addWidget(self.folder_open_button)
+
         self.freemocap_radio = QRadioButton('Load FreeMoCap Data')
         self.freemocap_radio.setChecked(True)
         load_session_layout.addWidget(self.freemocap_radio)
         self.qualisys_radio = QRadioButton('Load Qualisys Data')
         load_session_layout.addWidget(self.qualisys_radio)
+        
+        self.folder_open_button = QPushButton('Load a session folder', self)
+        self.folder_open_button.clicked.connect(self.open_folder_dialog)
+        load_session_layout.addWidget(self.folder_open_button)
         groupbox.setLayout(load_session_layout)
+        
         return groupbox
     
     def create_skeleton_viewer_groupbox(self):
