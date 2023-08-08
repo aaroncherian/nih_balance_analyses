@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget,QVBoxLayout, QComboBox, QLineEdit, QFormLayout, QPushButton, QLabel, QHBoxLayout, QTableWidget, QTableWidgetItem, QFileDialog
+from PyQt6.QtWidgets import QWidget,QVBoxLayout, QComboBox, QLineEdit, QFormLayout, QPushButton, QLabel, QHBoxLayout, QTableWidget, QTableWidgetItem, QFileDialog, QCheckBox
 from PyQt6.QtGui import QIntValidator
 from PyQt6.QtCore import pyqtSignal
 
@@ -6,6 +6,15 @@ import json
 
 
 class FrameMarker(QWidget):
+    """Handles frame marking for conditions.
+
+    Allows users to set the starting and ending frames for various conditions.
+    Optionally offers the ability to set an ending frame based on a predefined interval.
+
+    Attributes:
+        conditions_dict_updated_signal (pyqtSignal): Signal emitted when the conditions dictionary is updated.
+    """
+
     conditions_dict_updated_signal = pyqtSignal()
     def __init__(self):
         super().__init__()
@@ -33,8 +42,8 @@ class FrameMarker(QWidget):
         self.ending_frame.setFixedWidth(text_width)
 
         frame_form = QFormLayout()
-        frame_form.addRow(QLabel('Starting Frame'), self.starting_frame)
-        frame_form.addRow(QLabel('Ending Frame'), self.ending_frame)
+        frame_form.addRow(QLabel('Start Frame'), self.starting_frame)
+        frame_form.addRow(QLabel('End Frame'), self.ending_frame)
 
         conditions_layout.addLayout(frame_form)
         
@@ -47,6 +56,21 @@ class FrameMarker(QWidget):
         self.load_conditions_button.pressed.connect(self.load_conditions)
         self.load_conditions_button.setEnabled(False)
         conditions_layout.addWidget(self.load_conditions_button)
+
+        self.interval_input = QLineEdit("1600")  # default value
+        self.interval_input.setValidator(QIntValidator())
+        self.interval_input.setFixedWidth(text_width)
+
+        self.auto_set_end_frame_checkbox = QCheckBox("Auto-Fill End Frame with Interval")
+
+        interval_layout = QHBoxLayout()
+        interval_layout.addWidget(self.auto_set_end_frame_checkbox)
+        interval_layout.addWidget(self.interval_input)
+
+        conditions_layout.addLayout(interval_layout)
+
+        # Connect the textChanged signal to calculate the ending frame
+        self.starting_frame.textChanged.connect(self.calculate_ending_frame)
 
         self._layout.addLayout(conditions_layout)
 
@@ -71,6 +95,17 @@ class FrameMarker(QWidget):
             self.saved_conditions_table.setItem(row_count,1,QTableWidgetItem(str(this_end_frame)))
 
         self.conditions_dict_updated_signal.emit()
+
+    def calculate_ending_frame(self):
+        """Calculate the ending frame based on the starting frame and interval."""
+        if self.auto_set_end_frame_checkbox.isChecked() and self.starting_frame.text() and self.interval_input.text():
+            try:
+                starting = int(self.starting_frame.text())
+                interval = int(self.interval_input.text())
+                self.ending_frame.setText(str(starting + interval))
+            except ValueError:
+                # Handle any potential conversion errors if the input isn't a valid integer yet
+                pass
     
     def load_conditions(self):
         self.folder_diag = QFileDialog()
