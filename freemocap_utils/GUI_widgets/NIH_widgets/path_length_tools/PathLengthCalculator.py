@@ -31,7 +31,5 @@ class PathLengthCalculator():
 
         for dimension in range(3):
             velocity_data.append(np.diff(sliced_freemocap_data[:,dimension]))
-        # x_velocity_data = np.diff(sliced_freemocap_data[:,0])
-        # y_velocity_data = np.diff(sliced_freemocap_data[:,1])
 
         return velocity_data 
