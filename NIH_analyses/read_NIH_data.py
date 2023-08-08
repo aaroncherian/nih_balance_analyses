@@ -12,7 +12,7 @@ from matplotlib.collections import PathCollection
 path_to_analysis_folder = Path(r'D:\ValidationStudy2022\FreeMocap_Data\qualisys_sesh_2022-05-24_16_02_53_JSM_T1_NIH\data_analysis\analysis_2023-02-21_14_56_38')
 #path_to_analysis_folder = Path(r'D:\ValidationStudy2022\FreeMocap_Data\sesh_2022-05-24_16_02_53_JSM_T1_NIH\data_analysis\analysis_2023-01-30_13_12_51')
 
-from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import PathLengthCalculator
+from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import path_length_calculator
 
 
 import matplotlib
