@@ -60,16 +60,12 @@ class MainWindow(QMainWindow):
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(MainTab(), "Main Menu")
 
-        # Create a central widget and set the layout
         central_widget = QWidget()
         layout = QVBoxLayout()
         layout.addWidget(self.tab_widget)
         central_widget.setLayout(layout)
 
-        # Set the central widget for the main window
         self.setCentralWidget(central_widget)
-
-
 
 
 class MainTab(QWidget):
@@ -160,20 +156,14 @@ class MainTab(QWidget):
 
     def build_mediapipe_skeleton(self, markers_to_use:list):
 
-        #self.mediapipe_skeleton = build_skeleton(self.skel3d_data,mediapipe_indices,mediapipe_connections)
         self.mediapipe_skeleton = build_skeleton(self.skel3d_data,markers_to_use,mediapipe_connections)
-
         self.num_frames = self.skel3d_data.shape[0]
-        # self.reset_slider()
         self.skeleton_view_widget.reset_skeleton_3d_plot(self.skel3d_data, self.mediapipe_skeleton)
-        #self.reset_skeleton_3d_plot()
-        #self.session_folder_loaded_signal.emit()
         self._handle_session_folder_loaded()
     
     def set_session_folder_path(self):
         self.camera_view_widget.video_loader.set_session_folder_path(self.session_folder_path)
         self.saving_data_widget.set_session_folder_path(self.session_folder_path)
-        # self.balance_assessment_widget.set_session_folder_path(self.session_folder_path)
     
     def enable_buttons(self):
         self.balance_assessment_widget.run_path_length_analysis_button.setEnabled(True)
@@ -182,7 +172,6 @@ class MainTab(QWidget):
         self.frame_marking_widget.load_conditions_button.setEnabled(True)
         self.saving_data_widget.save_data_button.setEnabled(True)
 
-    
     def set_condition_frames_dictionary(self, condition_frames_dictionary:dict):
         self.condition_frames_dictionary = condition_frames_dictionary
 
