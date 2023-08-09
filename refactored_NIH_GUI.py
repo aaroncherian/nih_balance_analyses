@@ -10,6 +10,8 @@ from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import Ba
 from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
 from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_results import BalanceAssessmentResults
 
+from freemocap_utils.GUI_widgets.NIH_widgets.plots.path_length_line_plot import PathLengthsPlot
+
 from pathlib import Path
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -58,8 +60,12 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
+        self.results_container = BalanceAssessmentResults(path_length_dictionary={}, velocity_dictionary={})
+
         self.tab_widget = QTabWidget()
-        self.tab_widget.addTab(MainTab(), "Main Menu")
+
+        self.main_tab = MainTab(self.results_container)
+        self.tab_widget.addTab(self.main_tab, "Main Menu")
 
         central_widget = QWidget()
         layout = QVBoxLayout()
@@ -68,10 +74,26 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
+        self.connect_signals_to_slots()
+
+    def connect_signals_to_slots(self):
+        self.main_tab.balance_assessment_widget.balance_assessment_finished_signal.connect(self.add_path_lengths_tab)
+
+    def add_path_lengths_tab(self):
+        # Instantiate the plotting widget and plot the data
+        path_lengths_plot_widget = PathLengthsPlot()
+        path_lengths_plot_widget.plot_data(self.results_container.path_length_dictionary)
+
+        # Add the plotting widget as a new tab
+        self.tab_widget.addTab(path_lengths_plot_widget, "Path Length vs. Condition")
+
+
+
+
 
 class MainTab(QWidget):
 
-    def __init__(self):
+    def __init__(self, results_container):
         super().__init__()
 
         self.setWindowTitle("My App")
@@ -79,7 +101,8 @@ class MainTab(QWidget):
         layout = QVBoxLayout(self) 
 
         self.file_manager = FileManager()
-        self.balance_results = BalanceAssessmentResults(path_length_dictionary={}, velocity_dictionary={})
+        self.results_container = results_container
+        
 
         slider_and_skeleton_layout = QVBoxLayout()
 
@@ -153,8 +176,6 @@ class MainTab(QWidget):
             com_data, error_msg = self.file_manager.load_center_of_mass_data(self.session_folder_path)
             if not error_msg:
                 self.balance_assessment_widget.set_center_of_mass_data(com_data)
-
-
 
     def build_mediapipe_skeleton(self, markers_to_use:list):
 
@@ -233,7 +254,7 @@ class MainTab(QWidget):
     def create_balance_assessment_groupbox(self):
         groupbox = QGroupBox("Run Balance Assessment")
         layout = QVBoxLayout()
-        self.balance_assessment_widget = BalanceAssessmentWidget(self.balance_results)
+        self.balance_assessment_widget = BalanceAssessmentWidget(self.results_container)
         layout.addWidget(self.balance_assessment_widget)
         groupbox.setLayout(layout)
         return groupbox
@@ -241,7 +262,7 @@ class MainTab(QWidget):
     def create_saving_data_groupbox(self):
         groupbox = QGroupBox("Save Data")
         layout = QVBoxLayout()
-        self.saving_data_widget = SavingDataAnalysisWidget(self.balance_results)
+        self.saving_data_widget = SavingDataAnalysisWidget(self.results_container)
         layout.addWidget(self.saving_data_widget)
         groupbox.setLayout(layout)
         return groupbox
