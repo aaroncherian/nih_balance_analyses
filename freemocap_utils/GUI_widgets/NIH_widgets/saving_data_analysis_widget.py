@@ -10,12 +10,12 @@ import datetime
 import pandas as pd
 
 class SavingDataAnalysisWidget(QWidget):
-    def __init__(self):
+    def __init__(self, balance_results_container):
         super().__init__()
 
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
-
+        self.balance_results_container = balance_results_container
 
         self.saved_folder_name_entry = QLineEdit()
         self.saved_folder_name_entry.setMaximumWidth(200)

@@ -8,6 +8,7 @@ from freemocap_utils.GUI_widgets.NIH_widgets.frame_marking_widget import FrameMa
 from freemocap_utils.GUI_widgets.NIH_widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
 from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import BalanceAssessmentWidget
 from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
+from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_results import BalanceAssessmentResults
 
 from pathlib import Path
 
@@ -78,6 +79,7 @@ class MainTab(QWidget):
         layout = QVBoxLayout(self) 
 
         self.file_manager = FileManager()
+        self.balance_results = BalanceAssessmentResults(path_length_dictionary={}, velocity_dictionary={})
 
         slider_and_skeleton_layout = QVBoxLayout()
 
@@ -231,7 +233,7 @@ class MainTab(QWidget):
     def create_balance_assessment_groupbox(self):
         groupbox = QGroupBox("Run Balance Assessment")
         layout = QVBoxLayout()
-        self.balance_assessment_widget = BalanceAssessmentWidget()
+        self.balance_assessment_widget = BalanceAssessmentWidget(self.balance_results)
         layout.addWidget(self.balance_assessment_widget)
         groupbox.setLayout(layout)
         return groupbox
@@ -239,7 +241,7 @@ class MainTab(QWidget):
     def create_saving_data_groupbox(self):
         groupbox = QGroupBox("Save Data")
         layout = QVBoxLayout()
-        self.saving_data_widget = SavingDataAnalysisWidget()
+        self.saving_data_widget = SavingDataAnalysisWidget(self.balance_results)
         layout.addWidget(self.saving_data_widget)
         groupbox.setLayout(layout)
         return groupbox

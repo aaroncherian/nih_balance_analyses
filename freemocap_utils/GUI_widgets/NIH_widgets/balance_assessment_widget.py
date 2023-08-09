@@ -14,9 +14,12 @@ from PyQt6.QtCore import pyqtSignal
 
 class BalanceAssessmentWidget(QWidget):
     run_button_clicked_signal = pyqtSignal()
+    balance_assessment_finished_signal = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, balance_results_container):
         super().__init__()
+        
+        self.balance_results_container = balance_results_container
 
         self.balance_assessment_worker = None
         self.total_body_COM_data = None
@@ -59,6 +62,10 @@ class BalanceAssessmentWidget(QWidget):
 
         self.path_length_results.setText(str(self.path_length_dictionary))
 
+        self.balance_results_container.path_length_dictionary = self.path_length_dictionary
+        self.balance_results_container.velocity_dictionary = self.velocity_dictionary
+
+        self.balance_assessment_finished_signal.emit()
         f = 2
         
     def set_conditions_frames_dictionary(self, condition_frames_dictionary:dict):
