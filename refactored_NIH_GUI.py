@@ -1,5 +1,5 @@
 
-from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton, QGroupBox
+from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton, QGroupBox,QTabWidget
 
 from freemocap_utils.GUI_widgets.skeleton_view_widget import SkeletonViewWidget
 from freemocap_utils.GUI_widgets.slider_widget import FrameCountSlider
@@ -57,8 +57,29 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
+        self.tab_widget = QTabWidget()
+        self.tab_widget.addTab(MainTab(), "Main Menu")
+
+        # Create a central widget and set the layout
+        central_widget = QWidget()
         layout = QVBoxLayout()
-        widget = QWidget()
+        layout.addWidget(self.tab_widget)
+        central_widget.setLayout(layout)
+
+        # Set the central widget for the main window
+        self.setCentralWidget(central_widget)
+
+
+
+
+class MainTab(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("My App")
+
+        layout = QVBoxLayout(self) 
 
         self.file_manager = FileManager()
 
@@ -84,8 +105,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.balance_assessment_groupbox)
         layout.addWidget(self.saving_data_groupbox)
 
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
+        self.setLayout(layout) 
 
         self.connect_signals_to_slots()
 
@@ -234,10 +254,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.saving_data_widget)
         groupbox.setLayout(layout)
         return groupbox
-
-
-
-
+    
 
 class HistogramWindow(QMainWindow):
     def __init__(self, velocities_dict:dict, parent = None):
