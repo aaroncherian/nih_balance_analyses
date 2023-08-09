@@ -22,11 +22,12 @@ class PathLengthsPlot(QWidget):
         layout.addWidget(self.canvas)
         self.setLayout(layout)
 
-    def plot_data(self, path_length_dictionary):
+    def plot_data(self, results_container):
         # Clear the previous plot (if any)
         self.figure.clear()
         ax = self.figure.add_subplot(111)
 
+        path_length_dictionary = results_container.path_length_dictionary
         # Convert the dictionary to a DataFrame
         freemocap_path_lengths = pd.DataFrame(path_length_dictionary, index=[0])
 
@@ -47,5 +48,10 @@ class PathLengthsPlot(QWidget):
 
         # Redraw the canvas after plotting
         self.canvas.draw()
+
+        results_container.path_length_figure = self.figure
+
+
+
 
         

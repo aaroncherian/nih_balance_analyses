@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
     def add_path_lengths_tab(self):
         # Instantiate the plotting widget and plot the data
         path_lengths_plot_widget = PathLengthsPlot()
-        path_lengths_plot_widget.plot_data(self.results_container.path_length_dictionary)
+        path_lengths_plot_widget.plot_data(self.results_container)
 
         # Add the plotting widget as a new tab
         self.tab_widget.addTab(path_lengths_plot_widget, "Path Length vs. Condition")
