@@ -1,12 +1,12 @@
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton
 
-from freemocap_utils.GUI_widgets.skeleton_view_widget import SkeletonViewWidget
-from freemocap_utils.GUI_widgets.slider_widget import FrameCountSlider
-from freemocap_utils.GUI_widgets.video_capture_widget import VideoCapture
-from freemocap_utils.GUI_widgets.NIH_widgets.frame_marking_widget import FrameMarker
-from freemocap_utils.GUI_widgets.NIH_widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
-from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import BalanceAssessmentWidget
+from gui.skeleton_view_widget import SkeletonViewWidget
+from gui.slider_widget import FrameCountSlider
+from gui.video_capture_widget import VideoCapture
+from gui.frame_marking_widget import FrameMarker
+from gui.saving_data_analysis_widget import SavingDataAnalysisWidget
+from gui.balance_assessment_widget import BalanceAssessmentWidget
 from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
 
 from pathlib import Path

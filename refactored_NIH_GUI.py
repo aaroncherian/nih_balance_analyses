@@ -1,22 +1,19 @@
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton, QGroupBox,QTabWidget
 
-from freemocap_utils.GUI_widgets.skeleton_view_widget import SkeletonViewWidget
-from freemocap_utils.GUI_widgets.slider_widget import FrameCountSlider
-from freemocap_utils.GUI_widgets.video_capture_widget import VideoDisplay
-from freemocap_utils.GUI_widgets.NIH_widgets.frame_marking_widget import FrameMarker
-from freemocap_utils.GUI_widgets.NIH_widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
-from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import BalanceAssessmentWidget
+from gui.skeleton_view_widget import SkeletonViewWidget
+from gui.slider_widget import FrameCountSlider
+from gui.video_capture_widget import VideoDisplay
+from gui.frame_marking_widget import FrameMarker
+from gui.saving_data_analysis_widget import SavingDataAnalysisWidget
+from gui.balance_assessment_widget import BalanceAssessmentWidget
 from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
-from freemocap_utils.GUI_widgets.NIH_widgets.results_container import BalanceAssessmentResultsContainer
+from gui.results_container import BalanceAssessmentResultsContainer
 
-from freemocap_utils.GUI_widgets.NIH_widgets.plots.path_length_line_plot import PathLengthsPlot
-from freemocap_utils.GUI_widgets.NIH_widgets.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot
+from gui.plots.path_length_line_plot import PathLengthsPlot
+from gui.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot
 
 from pathlib import Path
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
 
 import numpy as np
 

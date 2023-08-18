@@ -1,5 +1,5 @@
 import threading
-from freemocap_utils.GUI_widgets.NIH_widgets.path_length_tools import path_length_calculator
+from analysis import path_length_calculator
 import numpy as np
 
 class BalanceAssessmentWorkerThread(threading.Thread):

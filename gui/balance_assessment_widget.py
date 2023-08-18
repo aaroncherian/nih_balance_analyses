@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget,QVBoxLayout, QPushButton, QLabel
-from freemocap_utils.GUI_widgets.NIH_widgets.balance_thread_worker import BalanceAssessmentWorkerThread
+from gui.balance_thread_worker import BalanceAssessmentWorkerThread
 
 from PyQt6.QtCore import pyqtSignal
 
