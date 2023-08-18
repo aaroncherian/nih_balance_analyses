@@ -8,9 +8,10 @@ from freemocap_utils.GUI_widgets.NIH_widgets.frame_marking_widget import FrameMa
 from freemocap_utils.GUI_widgets.NIH_widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
 from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_widget import BalanceAssessmentWidget
 from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
-from freemocap_utils.GUI_widgets.NIH_widgets.balance_assessment_results import BalanceAssessmentResults
+from freemocap_utils.GUI_widgets.NIH_widgets.results_container import BalanceAssessmentResultsContainer
 
 from freemocap_utils.GUI_widgets.NIH_widgets.plots.path_length_line_plot import PathLengthsPlot
+from freemocap_utils.GUI_widgets.NIH_widgets.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot
 
 from pathlib import Path
 
@@ -60,7 +61,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
-        self.results_container = BalanceAssessmentResults(path_length_dictionary={}, velocity_dictionary={})
+        self.results_container = BalanceAssessmentResultsContainer(path_length_dictionary={}, velocity_dictionary={}, postion_dictionary={}, center_of_mass_xyz = None)
 
         self.tab_widget = QTabWidget()
 
@@ -77,15 +78,25 @@ class MainWindow(QMainWindow):
         self.connect_signals_to_slots()
 
     def connect_signals_to_slots(self):
-        self.main_tab.balance_assessment_widget.balance_assessment_finished_signal.connect(self.add_path_lengths_tab)
+        self.main_tab.balance_assessment_widget.balance_assessment_finished_signal.connect(self.add_path_lengths_plot_tab)
+        self.main_tab.balance_assessment_widget.balance_assessment_finished_signal.connect(self.add_position_and_velocity_plot_tab)
 
-    def add_path_lengths_tab(self):
+    def add_path_lengths_plot_tab(self):
         # Instantiate the plotting widget and plot the data
         path_lengths_plot_widget = PathLengthsPlot()
         path_lengths_plot_widget.plot_data(self.results_container)
 
         # Add the plotting widget as a new tab
         self.tab_widget.addTab(path_lengths_plot_widget, "Path Length vs. Condition")
+
+    def add_position_and_velocity_plot_tab(self):
+        # Instantiate the plotting widget and plot the data
+        position_and_velocity_plot_widget = PositionAndVelocityPlot()
+        position_and_velocity_plot_widget.plot_data(self.results_container)
+
+        # Add the plotting widget as a new tab
+        self.tab_widget.addTab(position_and_velocity_plot_widget, "Position and Velocity vs. Condition")
+
 
 
 
@@ -176,6 +187,7 @@ class MainTab(QWidget):
             com_data, error_msg = self.file_manager.load_center_of_mass_data(self.session_folder_path)
             if not error_msg:
                 self.balance_assessment_widget.set_center_of_mass_data(com_data)
+                self.results_container.center_of_mass_xyz = com_data
 
     def build_mediapipe_skeleton(self, markers_to_use:list):
 

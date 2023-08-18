@@ -44,7 +44,7 @@ class BalanceAssessmentWidget(QWidget):
             # Handle the case where the necessary data isn't loaded yet.
             return
         
-        task_list = ['calculate_path_lengths', 'calculate_velocities']
+        task_list = ['calculate_path_lengths', 'calculate_velocities', 'splice_positions_by_condition']
 
         self.balance_assessment_worker = BalanceAssessmentWorkerThread(
             com_data=self.total_body_COM_data,
@@ -59,11 +59,13 @@ class BalanceAssessmentWidget(QWidget):
     def on_balance_assessment_completed(self, task_results):
         self.path_length_dictionary = task_results['calculate_path_lengths']['result']
         self.velocity_dictionary = task_results['calculate_velocities']['result']
+        self.position_dictionary = task_results['splice_positions_by_condition']['result']
 
         self.path_length_results.setText(str(self.path_length_dictionary))
 
         self.balance_results_container.path_length_dictionary = self.path_length_dictionary
         self.balance_results_container.velocity_dictionary = self.velocity_dictionary
+        self.balance_results_container.position_dictionary = self.position_dictionary
 
         self.balance_assessment_finished_signal.emit()
         f = 2

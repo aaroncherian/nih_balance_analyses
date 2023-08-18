@@ -34,9 +34,15 @@ class BalanceAssessmentWorkerThread(threading.Thread):
         self.available_tasks = {
             'calculate_path_lengths': self.calculate_path_lengths,
             'calculate_velocities': self.calculate_velocities,
+            'splice_positions_by_condition': self.splice_positions_by_condition
         }
         
-        self.tasks = {task_name: {'function': self.available_tasks[task_name], 'result': None} for task_name in task_list}
+        self.tasks = {}
+        for task_name in task_list:
+            try:
+                self.tasks[task_name] = {'function': self.available_tasks[task_name], 'result': None}
+            except KeyError:
+                raise ValueError(f"The task '{task_name}' was not found in the available tasks {self.available_tasks.keys()}")
         self.task_running_callback = task_running_callback
         self.task_completed_callback = task_completed_callback
         self.all_tasks_finished_callback = all_tasks_finished_callback
@@ -54,10 +60,7 @@ class BalanceAssessmentWorkerThread(threading.Thread):
 
             
             if self.task_completed_callback:
-                if is_completed:
-                    self.task_completed_callback(task_name, result)
-                else:
-                    self.task_completed_callback(task_name, None)
+                self.task_completed_callback(task_name, result if is_completed else None)
 
         if self.all_tasks_finished_callback:
             self.all_tasks_finished_callback(self.tasks)
@@ -89,3 +92,19 @@ class BalanceAssessmentWorkerThread(threading.Thread):
             velocity_dictionary[condition] = self.path_length_calculator.calculate_velocity(frame_range)
 
         return True, velocity_dictionary
+    
+    def splice_positions_by_condition(self):
+        """
+        Splice the position data by condition to save out 
+
+        Returns:
+            tuple: A tuple containing a boolean indicating successful completion and dictionary of the center of mass position values during each condition.
+        """
+        position_dictionary = {}
+        for condition, frames in self.condition_frames_dictionary.items():
+            frame_range = range(frames[0], frames[1])
+            position_dictionary[condition] = self.com_data[frame_range[0]:frame_range[1],:]
+
+        return True, position_dictionary
+
+
