@@ -1,5 +1,5 @@
 
-from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton, QGroupBox,QTabWidget
+from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QRadioButton, QGroupBox,QTabWidget
 
 from gui.widgets.skeleton_view_widget import SkeletonViewWidget
 from gui.widgets.slider_widget import FrameCountSlider
@@ -7,54 +7,15 @@ from gui.widgets.video_capture_widget import VideoDisplay
 from gui.widgets.frame_marking_widget import FrameMarker
 from gui.widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
 from gui.widgets.balance_assessment_widget import BalanceAssessmentWidget
-from utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
+from gui.utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
+from gui.utils.file_manager import FileManager
 from gui.models.results_container import BalanceAssessmentResultsContainer
 
 from gui.plots.path_length_line_plot import PathLengthsPlot
 from gui.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot
 
-from pathlib import Path
 
-import numpy as np
 
-class FileManager:
-    def __init__(self):
-        self.data_options = {
-            "freemocap": {
-                "marker_data_array_name": "mediapipe_body_3d_xyz.npy",
-                "markers_to_use": mediapipe_indices
-            },
-            "qualisys": {
-                "marker_data_array_name": "clipped_qualisys_skel_3d.npy",
-                "markers_to_use": qualisys_indices
-            }
-        }
-        
-        self.session_folder_path = None
-
-    def get_existing_directory(self, dialog_title="Choose a session"):
-        folder_diag = QFileDialog()
-        self.session_folder_path = QFileDialog.getExistingDirectory(None, dialog_title)
-        self.session_folder_path = Path(self.session_folder_path)
-        return self.session_folder_path if self.session_folder_path else None
-
-    def load_skeleton_data(self, session_folder_path, marker_data_array_name):
-        skeleton_data_folder_path = session_folder_path / 'output_data' / marker_data_array_name
-        return np.load(skeleton_data_folder_path)
-    
-    
-    def load_center_of_mass_data(self, session_folder_path):
-        """Load the center of mass data from the given session folder path."""
-        try:
-            path_to_total_body_COM_data = session_folder_path / 'output_data' / 'center_of_mass' / 'total_body_center_of_mass_xyz.npy'
-            total_body_COM_data = np.load(path_to_total_body_COM_data)
-            return total_body_COM_data, None  # Return the data and None for error message
-        except Exception as e:
-            return None, str(e)  # Return None for data and the error message
-
-    def get_data_option(self, option_name):
-        return self.data_options.get(option_name)
-    
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -161,7 +122,7 @@ class MainTab(QWidget):
 
     def update_condition_frame_dictionary(self):
         self.results_container.condition_frame_dictionary = self.frame_marking_widget.condition_widget_dictionary
-        
+
     def set_video_to_slider_frame(self):
         current_frame = self.frame_count_slider.slider.value()
         self.camera_view_widget.set_frame(current_frame)

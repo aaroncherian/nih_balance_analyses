@@ -1,5 +1,5 @@
 from PyQt6.QtCore import pyqtSignal
-from PyQt6.QtWidgets import QWidget,QFileDialog,QPushButton,QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -7,10 +7,7 @@ matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 
-from pathlib import Path
 import numpy as np
-
-from utils.mediapipe_skeleton_builder import mediapipe_indices,mediapipe_connections,build_skeleton
 
 
 class SkeletonViewWidget(QWidget):

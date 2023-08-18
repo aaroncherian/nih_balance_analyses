@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import json
 from pathlib import Path 
-from utils.mediapipe_skeleton_builder import mediapipe_indices
+from gui.utils.mediapipe_skeleton_builder import mediapipe_indices
 
 
 class FileManager:
