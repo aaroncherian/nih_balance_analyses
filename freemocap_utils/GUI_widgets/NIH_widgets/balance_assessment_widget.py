@@ -1,14 +1,5 @@
-from freemocap_utils.freemocap_data_loader import FreeMoCapDataLoader
 from PyQt6.QtWidgets import QWidget,QVBoxLayout, QPushButton, QLabel
 from freemocap_utils.GUI_widgets.NIH_widgets.balance_thread_worker import BalanceAssessmentWorkerThread
-
-import numpy as np
-
-from pathlib import Path
-import json
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
 
 from PyQt6.QtCore import pyqtSignal
 
