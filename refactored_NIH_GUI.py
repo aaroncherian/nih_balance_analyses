@@ -149,8 +149,7 @@ class MainTab(QWidget):
         self.camera_view_widget.video_loader.video_loaded_signal.connect(self.set_video_to_slider_frame)
 
         self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.balance_assessment_widget.set_condition_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
-        
-        self.balance_assessment_widget.run_button_clicked_signal.connect(self.show_histograms)
+    
 
     def _handle_session_folder_loaded(self):
         self.frame_count_slider.set_slider_range(self.num_frames)
@@ -207,10 +206,6 @@ class MainTab(QWidget):
 
     def set_condition_frames_dictionary(self, condition_frames_dictionary:dict):
         self.condition_frames_dictionary = condition_frames_dictionary
-
-    def show_histograms(self):
-        self.window = HistogramWindow(self.balance_assessment_widget.velocity_dictionary)
-        self.window.show()
 
     def create_load_session_groupbox(self):
         groupbox = QGroupBox("Load a Session")
@@ -277,59 +272,6 @@ class MainTab(QWidget):
         groupbox.setLayout(layout)
         return groupbox
     
-
-class HistogramWindow(QMainWindow):
-    def __init__(self, velocities_dict:dict, parent = None):
-        super().__init__()
-        self.layout = QVBoxLayout()
-        
-        self.widget = QWidget()
-        self.widget.setLayout(self.layout)
-        self.setCentralWidget(self.widget)
-
-        x_array_list = [item[0] for item in velocities_dict.values()] #grab the X dimension of each condition to plot 
-        conditions_list = list(velocities_dict.keys())
-
-        velocities_dict = dict(zip(conditions_list,x_array_list))
-
-        self.velocities_dict = velocities_dict
-        self.setWindowTitle("Window22222")
-        self.create_subplots()
-        
-
-
-    def create_subplots(self):
-        self.histogram_plots = Mpl3DPlotCanvas()
-
-        ylimit = 120
-        hist_range = (-.5,.5)
-        num_bins = 75
-        alpha_val = .75
-
-        num_rows = len(self.velocities_dict)
-        for count, condition in enumerate(self.velocities_dict, start=1):
-            self.ax = self.histogram_plots.figure.add_subplot(num_rows,1,count)
-            self.ax.set_title(condition)
-            self.ax.set_ylim(0,ylimit)
-
-            # self.ax.plot(self.velocities_dict[condition])
-
-            self.ax.hist(self.velocities_dict[condition], bins = num_bins, range = hist_range,label = condition, alpha = alpha_val)
-            self.histogram_plots.figure.canvas.draw_idle()
-
-        
-        # self.histogram_plots.figure.savefig('temp.png')
-        self.layout.addWidget(self.histogram_plots)
-
-        
-class Mpl3DPlotCanvas(FigureCanvasQTAgg):
-
-    def __init__(self, parent=None, width=4, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        super(Mpl3DPlotCanvas, self).__init__(fig)
-
-            
-
 
 if __name__ == "__main__":
 
