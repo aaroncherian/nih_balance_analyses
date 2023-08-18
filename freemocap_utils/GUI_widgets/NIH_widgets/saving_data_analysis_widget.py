@@ -8,6 +8,7 @@ import json
 import datetime
 
 import pandas as pd
+import numpy as np
 
 class SavingDataAnalysisWidget(QWidget):
     def __init__(self, file_manager, results_container):
@@ -44,14 +45,8 @@ class SavingDataAnalysisWidget(QWidget):
         self.save_data_json(formatted_condition_data_dict, 'condition_data.json', self.saved_data_analysis_path)
         self.save_velocity_dict_as_csv(self.results_container.velocity_dictionary,self.saved_data_analysis_path)
         self.save_position_dict_as_csv(self.results_container.position_dictionary,self.saved_data_analysis_path)
-        # self.save_plot(self.histogram_figure,self.saved_data_analysis_path)
-
-
-    # def save_conditions_dict(self, conditions_dictionary:dict):
-    #     saved_folder_name = self.saved_folder_name_entry.text()
-    #     self.saved_data_analysis_path = self.create_folder_to_save_data(saved_folder_name)
-
-    #     self.create_frame_interval_json(conditions_dictionary,self.saved_data_analysis_path)
+        self.save_plot(self.results_container.path_length_figure,'path_length_plot.png',self.saved_data_analysis_path)
+        self.save_plot(self.results_container.position_and_velocity_figure,'position_and_velocity_plot.png',self.saved_data_analysis_path)
 
 
     def create_folder_to_save_data(self, saved_folder_name:str):
@@ -78,21 +73,21 @@ class SavingDataAnalysisWidget(QWidget):
         position_dataframe.to_csv(save_folder_path/'condition_positions.csv', index=False)
 
     def _create_dataframe_from_dict(self, data_dict:dict):
-        data_frames = []
-        for count, dimension in enumerate(['x', 'y', 'z']):
-            this_dimension_array_list = [item[count] for item in data_dict.values()]
-            conditions_list = list(data_dict.keys())
-            this_dimension_dict = dict(zip(conditions_list, this_dimension_array_list))
-            df = pd.DataFrame(this_dimension_dict)
-            df['Dimension'] = dimension
-            data_frames.append(df)
-        
-        combined_df = pd.concat(data_frames).reset_index()
-        combined_df = combined_df.rename(columns={"index": "Frame"})
-        return combined_df
-        
+        dataframes = []
 
-    def save_plot(self,figure,save_folder_path:Path):
-        figure.savefig(str(save_folder_path/'velocity_histogram.png'))
+        for condition, arrays in data_dict.items():
+            for dimension, arr in zip(['x', 'y', 'z'], arrays):
+                temp_df = pd.DataFrame({f"{condition}_{dimension}": arr})
+                dataframes.append(temp_df)
+
+        # Concatenate all dataframes horizontally
+        result_df = pd.concat(dataframes, axis=1)
+        
+        result_df['Frame'] = np.arange(len(result_df))
+        
+        return result_df
+
+    def save_plot(self,figure,file_name:str, save_folder_path:Path):
+        figure.savefig(str(save_folder_path/file_name))
 
 
