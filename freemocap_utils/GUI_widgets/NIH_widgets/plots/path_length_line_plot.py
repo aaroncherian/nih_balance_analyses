@@ -34,12 +34,19 @@ class PathLengthsPlot(QWidget):
         # Set seaborn style
         sns.set_style('whitegrid')
 
-        # Conditions
-        conditions = freemocap_path_lengths.columns
-        conditions = [condition.replace('/', '\n') for condition in conditions]
+        # Original condition names from the data
+        original_conditions = freemocap_path_lengths.columns
+        # Formatted condition names for the plot (replacing '/' with '\n' for better readability)
+        formatted_conditions = [condition.replace('/', '\n') for condition in original_conditions]
 
         # Plotting Freemocap data for the single session
-        ax.plot(conditions, freemocap_path_lengths.iloc[0], '-o', color= '#7994B0')
+        ax.plot(formatted_conditions, freemocap_path_lengths.iloc[0], '-o', color= '#7994B0')
+
+        # Annotate each data point with its value
+        for condition, formatted_condition in zip(original_conditions, formatted_conditions):
+            x = formatted_condition
+            y = freemocap_path_lengths[condition].values[0]
+            ax.annotate(f"{y:.2f}", (x, y), textcoords="offset points", xytext=(0,15), ha='center')
 
         # Labels and titles for Freemocap
         ax.set_title('Freemocap Path Lengths Per Condition', fontsize = 16)
@@ -53,5 +60,4 @@ class PathLengthsPlot(QWidget):
 
 
 
-
-        
+                
