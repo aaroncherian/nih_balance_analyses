@@ -6,6 +6,7 @@ import numpy as np
 
 @dataclass
 class BalanceAssessmentResultsContainer:
+    condition_frame_dictionary: Dict[str, Any]
     path_length_dictionary: Dict[str, Any]
     velocity_dictionary: Dict[str, Any]
     postion_dictionary: Dict[str,Any]

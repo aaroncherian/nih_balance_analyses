@@ -70,8 +70,9 @@ class BalanceAssessmentWidget(QWidget):
         self.balance_assessment_finished_signal.emit()
         f = 2
         
-    def set_conditions_frames_dictionary(self, condition_frames_dictionary:dict):
+    def set_condition_frames_dictionary(self, condition_frames_dictionary:dict):
         self.condition_frames_dictionary = condition_frames_dictionary
+        self.balance_results_container.condition_frames_dictionary = condition_frames_dictionary
 
     def set_center_of_mass_data(self, com_data):
         """Set the center of mass data for the widget."""

@@ -101,10 +101,13 @@ class BalanceAssessmentWorkerThread(threading.Thread):
             tuple: A tuple containing a boolean indicating successful completion and dictionary of the center of mass position values during each condition.
         """
         position_dictionary = {}
-        for condition, frames in self.condition_frames_dictionary.items():
-            frame_range = range(frames[0], frames[1])
-            position_dictionary[condition] = self.com_data[frame_range[0]:frame_range[1],:]
 
+        for condition, frames in self.condition_frames_dictionary.items():
+            start_frame, end_frame = frames
+            
+            # Extract positions for each dimension separately and store in a list
+            position_data = [self.com_data[start_frame:end_frame, i] for i in range(3)]
+            position_dictionary[condition] = position_data
         return True, position_dictionary
 
 

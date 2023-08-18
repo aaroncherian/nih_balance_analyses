@@ -33,10 +33,13 @@ class FileManager:
             }
         }
         
+        self.session_folder_path = None
+
     def get_existing_directory(self, dialog_title="Choose a session"):
         folder_diag = QFileDialog()
-        session_folder_path = QFileDialog.getExistingDirectory(None, dialog_title)
-        return Path(session_folder_path) if session_folder_path else None
+        self.session_folder_path = QFileDialog.getExistingDirectory(None, dialog_title)
+        self.session_folder_path = Path(self.session_folder_path)
+        return self.session_folder_path if self.session_folder_path else None
 
     def load_skeleton_data(self, session_folder_path, marker_data_array_name):
         skeleton_data_folder_path = session_folder_path / 'output_data' / marker_data_array_name
@@ -61,7 +64,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
-        self.results_container = BalanceAssessmentResultsContainer(path_length_dictionary={}, velocity_dictionary={}, postion_dictionary={}, center_of_mass_xyz = None)
+        self.results_container = BalanceAssessmentResultsContainer(condition_frame_dictionary={}, path_length_dictionary={}, velocity_dictionary={}, postion_dictionary={}, center_of_mass_xyz = None)
 
         self.tab_widget = QTabWidget()
 
@@ -145,14 +148,10 @@ class MainTab(QWidget):
         self.frame_count_slider.slider.valueChanged.connect(self.handle_slider_value_changed)
         self.camera_view_widget.video_loader.video_loaded_signal.connect(self.set_video_to_slider_frame)
 
-        self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.saving_data_widget.set_conditions_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
-        self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.balance_assessment_widget.set_conditions_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
+        self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.balance_assessment_widget.set_condition_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
         
         self.balance_assessment_widget.run_button_clicked_signal.connect(self.show_histograms)
-        self.balance_assessment_widget.run_button_clicked_signal.connect(lambda: self.saving_data_widget.set_conditions_path_length_dictionary(self.balance_assessment_widget.path_length_dictionary))
-        self.balance_assessment_widget.run_button_clicked_signal.connect(lambda: self.saving_data_widget.set_histogram_figure(self.window.histogram_plots.figure))
-        self.balance_assessment_widget.run_button_clicked_signal.connect(lambda: self.saving_data_widget.set_velocity_dictionary(self.balance_assessment_widget.velocity_dictionary))
-    
+
     def _handle_session_folder_loaded(self):
         self.frame_count_slider.set_slider_range(self.num_frames)
         self.enable_buttons()
@@ -198,7 +197,6 @@ class MainTab(QWidget):
     
     def set_session_folder_path(self):
         self.camera_view_widget.video_loader.set_session_folder_path(self.session_folder_path)
-        self.saving_data_widget.set_session_folder_path(self.session_folder_path)
     
     def enable_buttons(self):
         self.balance_assessment_widget.run_path_length_analysis_button.setEnabled(True)
@@ -274,7 +272,7 @@ class MainTab(QWidget):
     def create_saving_data_groupbox(self):
         groupbox = QGroupBox("Save Data")
         layout = QVBoxLayout()
-        self.saving_data_widget = SavingDataAnalysisWidget(self.results_container)
+        self.saving_data_widget = SavingDataAnalysisWidget(self.file_manager, self.results_container)
         layout.addWidget(self.saving_data_widget)
         groupbox.setLayout(layout)
         return groupbox
