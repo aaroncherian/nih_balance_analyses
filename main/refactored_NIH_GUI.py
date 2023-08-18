@@ -145,8 +145,8 @@ class MainTab(QWidget):
         self.frame_count_slider.slider.valueChanged.connect(self.handle_slider_value_changed)
         self.camera_view_widget.video_loader.video_loaded_signal.connect(self.set_video_to_slider_frame)
 
-        self.frame_marking_widget.conditions_dict_updated_signal.connect(lambda: self.balance_assessment_widget.set_condition_frames_dictionary(self.frame_marking_widget.condition_widget_dictionary))
-    
+        self.frame_marking_widget.conditions_dict_updated_signal.connect(self.update_condition_frame_dictionary)
+      
 
     def _handle_session_folder_loaded(self):
         self.frame_count_slider.set_slider_range(self.num_frames)
@@ -159,7 +159,9 @@ class MainTab(QWidget):
             current_frame = self.frame_count_slider.slider.value()
             self.camera_view_widget.set_frame(current_frame)
 
-
+    def update_condition_frame_dictionary(self):
+        self.results_container.condition_frame_dictionary = self.frame_marking_widget.condition_widget_dictionary
+        
     def set_video_to_slider_frame(self):
         current_frame = self.frame_count_slider.slider.value()
         self.camera_view_widget.set_frame(current_frame)

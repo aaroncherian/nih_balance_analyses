@@ -14,7 +14,6 @@ class BalanceAssessmentWidget(QWidget):
 
         self.balance_assessment_worker = None
         self.total_body_COM_data = None
-        self.condition_frames_dictionary = None
 
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
@@ -31,15 +30,16 @@ class BalanceAssessmentWidget(QWidget):
         self.start_balance_assessment()
     
     def start_balance_assessment(self):
-        if self.total_body_COM_data is None or self.condition_frames_dictionary is None:
+        if self.total_body_COM_data is None or self.balance_results_container.condition_frame_dictionary is None:
             # Handle the case where the necessary data isn't loaded yet.
             return
         
         task_list = ['calculate_path_lengths', 'calculate_velocities', 'splice_positions_by_condition']
 
+
         self.balance_assessment_worker = BalanceAssessmentWorkerThread(
             com_data=self.total_body_COM_data,
-            condition_frames_dictionary=self.condition_frames_dictionary,
+            condition_frames_dictionary=self.balance_results_container.condition_frame_dictionary,
             task_list=task_list,
             all_tasks_finished_callback=self.on_balance_assessment_completed
         )
@@ -60,10 +60,6 @@ class BalanceAssessmentWidget(QWidget):
 
         self.balance_assessment_finished_signal.emit()
         f = 2
-        
-    def set_condition_frames_dictionary(self, condition_frames_dictionary:dict):
-        self.condition_frames_dictionary = condition_frames_dictionary
-        self.balance_results_container.condition_frames_dictionary = condition_frames_dictionary
 
     def set_center_of_mass_data(self, com_data):
         """Set the center of mass data for the widget."""
