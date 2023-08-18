@@ -37,47 +37,50 @@ class FrameMarker(QWidget):
         """Create and return the conditions layout."""
         conditions_layout = QVBoxLayout()
 
+        # Load Previous Frame Intervals button
+        self.load_conditions_button = QPushButton('Load Previous Frame Interval JSON')
+        self.load_conditions_button.pressed.connect(self.load_conditions)
+        self.load_conditions_button.setEnabled(False)
+        conditions_layout.addWidget(self.load_conditions_button)
+
+        # Conditions dropdown
         self.conditions_box = QComboBox()
         self.conditions_box.addItems(['Eyes Open/Solid Ground', 'Eyes Closed/Solid Ground', 'Eyes Open/Foam', 'Eyes Closed/Foam'])
         self.conditions_box.currentTextChanged.connect(self.reset_start_and_end_frames)
         conditions_layout.addWidget(self.conditions_box)
 
-        text_width = 100
-        self.starting_frame = QLineEdit()
-        self.starting_frame.setValidator(QIntValidator())
-        self.starting_frame.setFixedWidth(text_width)
-
-        self.ending_frame = QLineEdit()
-        self.ending_frame.setValidator(QIntValidator())
-        self.ending_frame.setFixedWidth(text_width)
-
-        frame_form = QFormLayout()
-        frame_form.addRow(QLabel('Start Frame'), self.starting_frame)
-        frame_form.addRow(QLabel('End Frame'), self.ending_frame)
-        conditions_layout.addLayout(frame_form)
-
-        self.save_condition_button = QPushButton('Save Frame Interval For This Condition')
-        self.save_condition_button.pressed.connect(self.save_conditions_to_table)
-        self.save_condition_button.setEnabled(False)
-        conditions_layout.addWidget(self.save_condition_button)
-
-        self.load_conditions_button = QPushButton('Load Previous Frame Intervals')
-        self.load_conditions_button.pressed.connect(self.load_conditions)
-        self.load_conditions_button.setEnabled(False)
-        conditions_layout.addWidget(self.load_conditions_button)
-
-        self.interval_input = QLineEdit("1600")  # default value
-        self.interval_input.setValidator(QIntValidator())
-        self.interval_input.setFixedWidth(text_width)
-
+        # Auto-fill checkbox and its accompanying text box
         self.auto_set_end_frame_checkbox = QCheckBox("Auto-Fill End Frame with Interval")
         self.auto_set_end_frame_checkbox.stateChanged.connect(self.calculate_ending_frame)
-        self.starting_frame.textChanged.connect(self.calculate_ending_frame)
+        self.interval_input = QLineEdit("1600")  # default value
+        self.interval_input.setValidator(QIntValidator())
+        self.interval_input.setFixedWidth(100)
 
         interval_layout = QHBoxLayout()
         interval_layout.addWidget(self.auto_set_end_frame_checkbox)
         interval_layout.addWidget(self.interval_input)
         conditions_layout.addLayout(interval_layout)
+
+        # Starting and ending frame input boxes
+        text_width = 100
+        self.starting_frame = QLineEdit()
+        self.starting_frame.setValidator(QIntValidator())
+        self.starting_frame.setFixedWidth(text_width)
+        self.ending_frame = QLineEdit()
+        self.ending_frame.setValidator(QIntValidator())
+        self.ending_frame.setFixedWidth(text_width)
+        frame_form = QFormLayout()
+        frame_form.addRow(QLabel('Start Frame'), self.starting_frame)
+        frame_form.addRow(QLabel('End Frame'), self.ending_frame)
+        conditions_layout.addLayout(frame_form)
+
+        self.starting_frame.textChanged.connect(self.calculate_ending_frame)
+
+        # Save Frame Interval button
+        self.save_condition_button = QPushButton('Save Frame Interval For This Condition')
+        self.save_condition_button.pressed.connect(self.save_conditions_to_table)
+        self.save_condition_button.setEnabled(False)
+        conditions_layout.addWidget(self.save_condition_button)
 
         return conditions_layout
     
