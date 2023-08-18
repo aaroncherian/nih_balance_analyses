@@ -6,3 +6,5 @@
 .idea/modules.xml
 .idea/nih_balance_analyses.iml
 .idea/vcs.xml
+*.pyc
+*.pyc

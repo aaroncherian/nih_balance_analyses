@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 from pathlib import Path
 import numpy as np
 
-from freemocap_utils.mediapipe_skeleton_builder import mediapipe_indices,mediapipe_connections,build_skeleton
+from utils.mediapipe_skeleton_builder import mediapipe_indices,mediapipe_connections,build_skeleton
 
 
 class SkeletonViewWidget(QWidget):

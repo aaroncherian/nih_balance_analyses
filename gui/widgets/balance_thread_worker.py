@@ -1,5 +1,5 @@
 import threading
-from analysis import path_length_calculator
+from gui.analysis import path_length_calculator
 import numpy as np
 
 class BalanceAssessmentWorkerThread(threading.Thread):

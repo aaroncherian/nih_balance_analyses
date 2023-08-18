@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget,QVBoxLayout, QPushButton, QLabel
-from gui.balance_thread_worker import BalanceAssessmentWorkerThread
+from gui.widgets.balance_thread_worker import BalanceAssessmentWorkerThread
 
 from PyQt6.QtCore import pyqtSignal
 

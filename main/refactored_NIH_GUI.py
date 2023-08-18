@@ -1,14 +1,14 @@
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QFileDialog, QRadioButton, QGroupBox,QTabWidget
 
-from gui.skeleton_view_widget import SkeletonViewWidget
-from gui.slider_widget import FrameCountSlider
-from gui.video_capture_widget import VideoDisplay
-from gui.frame_marking_widget import FrameMarker
-from gui.saving_data_analysis_widget import SavingDataAnalysisWidget
-from gui.balance_assessment_widget import BalanceAssessmentWidget
-from freemocap_utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
-from gui.results_container import BalanceAssessmentResultsContainer
+from gui.widgets.skeleton_view_widget import SkeletonViewWidget
+from gui.widgets.slider_widget import FrameCountSlider
+from gui.widgets.video_capture_widget import VideoDisplay
+from gui.widgets.frame_marking_widget import FrameMarker
+from gui.widgets.saving_data_analysis_widget import SavingDataAnalysisWidget
+from gui.widgets.balance_assessment_widget import BalanceAssessmentWidget
+from utils.mediapipe_skeleton_builder import build_skeleton, mediapipe_connections, mediapipe_indices, qualisys_indices
+from gui.models.results_container import BalanceAssessmentResultsContainer
 
 from gui.plots.path_length_line_plot import PathLengthsPlot
 from gui.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot

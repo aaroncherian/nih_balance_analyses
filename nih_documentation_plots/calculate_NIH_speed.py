@@ -1,5 +1,5 @@
 
-from freemocap_utils import freemocap_data_loader
+from utils import freemocap_data_loader
 from pathlib import Path
 import numpy as np
 import pandas as pd
