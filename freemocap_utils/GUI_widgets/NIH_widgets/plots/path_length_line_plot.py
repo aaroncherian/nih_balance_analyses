@@ -42,7 +42,7 @@ class PathLengthsPlot(QWidget):
         ax.plot(conditions, freemocap_path_lengths.iloc[0], '-o', color= '#7994B0')
 
         # Labels and titles for Freemocap
-        ax.set_title('Freemocap', fontsize = 16)
+        ax.set_title('Freemocap Path Lengths Per Condition', fontsize = 16)
         ax.set_ylabel('Path Length (mm)', fontsize = 14)
         ax.set_xlabel('Condition', fontsize = 14)
 

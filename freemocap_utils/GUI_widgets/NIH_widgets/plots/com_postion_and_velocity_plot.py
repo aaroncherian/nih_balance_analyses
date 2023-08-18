@@ -28,7 +28,7 @@ class PositionAndVelocityPlot(QWidget):
     def __init__(self, parent=None):        
         super().__init__(parent)
         # Create a Figure instance and attach it to FigureCanvas.
-        self.figure = Figure(figsize=(10, 10))
+        self.figure = Figure(figsize=(15, 10))
         self.canvas = FigureCanvas(self.figure)
         
         # Create the navigation toolbar and attach it to the canvas.
@@ -58,25 +58,32 @@ class PositionAndVelocityPlot(QWidget):
 
         # Plot X Position
         ax1.plot(com_position[:, 0], color='blue')
-        ax1.set_title('X Position')
+        ax1.set_title('COM X Position')
         ax1.set_ylabel('Position (units)')
 
         # Plot Y Position
         ax2.plot(com_position[:, 1], color='green')
-        ax2.set_title('Y Position')
+        ax2.set_title('COM Y Position')
 
         # Plot X Velocity
         ax3.plot(com_velocity[:, 0], color='blue')
-        ax3.set_title('X Velocity')
+        ax3.set_title('COM X Velocity')
         ax3.set_ylabel('Velocity (units/s)')
-        ax3.set_xlabel('Time (frames)')
+        ax3.set_xlabel('Frame #')
 
         # Plot Y Velocity
         ax4.plot(com_velocity[:, 1], color='green')
-        ax4.set_title('Y Velocity')
-        ax4.set_xlabel('Time (frames)')
+        ax4.set_title('COM Y Velocity')
+        ax4.set_xlabel('Frame #')
 
+        self.figure.suptitle('Center of Mass Position and Velocity')
         # Redraw the canvas after plotting
+
+        ax1.grid(linewidth=0.5, alpha=0.5)
+        ax2.grid(linewidth=0.5, alpha=0.5)
+        ax3.grid(linewidth=0.5, alpha=0.5)
+        ax4.grid(linewidth=0.5, alpha=0.5)
+        
         self.canvas.draw()
 
         results_container.position_and_velocity_figure = self.figure
