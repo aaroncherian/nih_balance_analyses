@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Overview - Freemocap/NIH Balance Analysis Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/color-brewer.min.css">
+        <link href="../css/custom.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="..">Freemocap/NIH Balance Analysis Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../methods/" class="nav-link">Methods</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../results/" class="nav-link">Results</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/aaroncherian/nih_balance_analyses/edit/master/docs/overview.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#overview" class="nav-link">Overview</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="overview">Overview</h1>
+<p>Patient balance and progress in rehabilitation is often measured using comprehensive  <strong>qualitative</strong> assessments. However, these tests 
+tend to be <strong>subjective</strong> and may not be responsive to small changes in a patient. The ability to capture human movement data while 
+performing these clinical assessments could provide clinicians with quantitative, standardized insight into patient movement 
+capability. </p>
+<p>FreeMoCap is an <strong>open-source, low-cost, markerless motion capture system</strong> that leverages advancements in 
+computer vision and machine learning to capture human movement data without specialized equipment.</p>
+<p>To validate the suitability of FreeMoCap as a clinical assessment tool, we record participants performing the NIH Standing Balance Test (SBT). 
+We then compare center of mass (COM) derived parameters based on 3D pose estimation from FreeMoCap to both 3D estimates from 
+Qualisys, a marker-based system, and to the outcomes reported by the NIH BalancePod app. </p>
+<h3 id="existing-technology-and-limitations">Existing Technology and Limitations</h3>
+<p>Systems such as marker-based motion capture and force plates can provide highly accurate data, but they are extremely expensive and require specialized equipment, which often restricts their use to the laboratory environment. On the other hand, accelerometers are affordable and can be used to track real-world activities, but are limited in the information that they can provide about body position and orientation.</p>
+<p>As such, there is a need for a <strong>low-cost, accessible tool that could augment current rehabilitation practices by providing a comprehensive human movement data of a patient</strong></p>
+<h3 id="the-freemotioncapture-project-freemocap">The FreeMotionCapture Project (FreeMoCap)</h3>
+<p>FreeMoCap is an open-source, free, markerless motion capture system that leverages advancements in computer vision and machine learning to capture human movement data without specialized equipment.</p>
+<p>insert all things about freemocap here</p>
+<h3 id="aim">Aim</h3>
+<p>Validate the Free Motion Capture Project (FreeMoCap), on a clinical balance assessment: the NIH Standing Balance Test (SBT)</p>
+<h3 id="the-nih-standing-balance-test-sbt">The NIH Standing Balance Test (SBT)</h3>
+<p>The NIH SBT is an assessment tool designed to evaluate an individual’s postural stability and balance. Participants stand feet together, and are asked to stand as still as possible for 50s under increasingly difficult conditions. These conditions include:</p>
+<p>1) Standing with eyes <strong>open</strong> on <strong>solid ground</strong> <br>
+2) Standing with eyes <strong>closed</strong> on <strong>solid ground</strong> <br>
+3) Standing with eyes <strong>open</strong> on a <strong>foam pad</strong> <br>
+4) Standing with eyes <strong>closed</strong> on a <strong>foam pad</strong> <br></p>
+<p>In a typical assessment, an accelerometer (usually an iPhone) is worn around the participant's waist. The accelerometer measures postural sway, which is then converted into a number of NIH scores that represent overall balance ability </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
