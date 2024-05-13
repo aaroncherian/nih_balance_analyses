@@ -62,7 +62,7 @@ class SavingDataAnalysisWidget(QWidget):
     def _create_folder_to_save_data(self, saved_folder_name):
         """Create a folder to save the data."""
         saved_data_analysis_path = (self.file_manager.session_folder_path / 
-                                    'data_analysis' / saved_folder_name)
+                                    'data_analysis' / f'{self.file_manager.tracker_type}_analysis'/saved_folder_name)
         saved_data_analysis_path.mkdir(parents=True, exist_ok=True)
         return saved_data_analysis_path
 

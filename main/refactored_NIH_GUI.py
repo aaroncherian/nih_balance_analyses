@@ -135,14 +135,18 @@ class MainTab(QWidget):
             if self.freemocap_radio.isChecked():
                 marker_data_array_name = 'mediapipe_body_3d_xyz.npy'
                 markers_to_use = mediapipe_indices
+                path_to_data_folder = self.session_folder_path / 'output_data'
+                self.file_manager.tracker_type = 'freemocap'
             elif self.qualisys_radio.isChecked():
-                marker_data_array_name = 'clipped_qualisys_skel_3d.npy'
+                marker_data_array_name = 'qualisys_joint_centers_3d_xyz.npy'
                 markers_to_use = qualisys_indices
+                path_to_data_folder = self.session_folder_path / 'qualisys_data'
+                self.file_manager.tracker_type = 'qualisys'
 
-            self.skel3d_data = self.file_manager.load_skeleton_data(self.session_folder_path, marker_data_array_name)
+            self.skel3d_data = self.file_manager.load_skeleton_data(path_to_data_folder, marker_data_array_name)
             self.build_mediapipe_skeleton(markers_to_use)
 
-            com_data, error_msg = self.file_manager.load_center_of_mass_data(self.session_folder_path)
+            com_data, error_msg = self.file_manager.load_center_of_mass_data(path_to_data_folder)
             if not error_msg:
                 self.balance_assessment_widget.set_center_of_mass_data(com_data)
                 self.results_container.center_of_mass_xyz = com_data

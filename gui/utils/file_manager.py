@@ -17,6 +17,7 @@ class FileManager:
         }
         
         self.session_folder_path = None
+        self.tracker_type = None
 
     def get_existing_directory(self, dialog_title="Choose a session"):
         folder_diag = QFileDialog()
@@ -24,15 +25,15 @@ class FileManager:
         self.session_folder_path = Path(self.session_folder_path)
         return self.session_folder_path if self.session_folder_path else None
 
-    def load_skeleton_data(self, session_folder_path, marker_data_array_name):
-        skeleton_data_folder_path = session_folder_path / 'output_data' / marker_data_array_name
+    def load_skeleton_data(self, data_folder_path, marker_data_array_name):
+        skeleton_data_folder_path = data_folder_path / marker_data_array_name
         return np.load(skeleton_data_folder_path)
     
     
     def load_center_of_mass_data(self, session_folder_path):
         """Load the center of mass data from the given session folder path."""
         try:
-            path_to_total_body_COM_data = session_folder_path / 'output_data' / 'center_of_mass' / 'total_body_center_of_mass_xyz.npy'
+            path_to_total_body_COM_data = session_folder_path / 'center_of_mass' / 'total_body_center_of_mass_xyz.npy'
             total_body_COM_data = np.load(path_to_total_body_COM_data)
             return total_body_COM_data, None  # Return the data and None for error message
         except Exception as e:
