@@ -1,0 +1,43 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "nih_analyses"
+description = "NIH Balance Analyses"
+version = "0.1.0"  # Add this line
+readme = "README.md"
+authors = [{ name = "Aaron Cherian", email = "aaron@freemocap.org" }]
+license = { file = "LICENSE" }
+
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+
+keywords = [
+    "basic",
+    "template",
+    "python",
+    "repository"
+]
+
+dependencies = [
+    "numpy==1.26.*",
+    "pydantic==2.7.*",
+    "pyyaml==6.0.*",
+    "pandas==2.1.*",
+    "ipykernel==6.29.*",
+    "pyarrow==19.0.*",
+    "matplotlib",
+    "opencv-python",
+    "pyqt6",
+    "rich",
+    "plotly",
+    "seaborn",
+    "mkdocs-bootswatch",
+]
+
+requires-python = ">=3.9,<3.12"
+
