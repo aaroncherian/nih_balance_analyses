@@ -51,6 +51,7 @@ class FrameMarker(QWidget):
 
         # Auto-fill checkbox and its accompanying text box
         self.auto_set_end_frame_checkbox = QCheckBox("Auto-Fill End Frame with Interval")
+        self.auto_set_end_frame_checkbox.setChecked(True)
         self.auto_set_end_frame_checkbox.stateChanged.connect(self.calculate_ending_frame)
         self.interval_input = QLineEdit("1600")  # default value
         self.interval_input.setValidator(QIntValidator())

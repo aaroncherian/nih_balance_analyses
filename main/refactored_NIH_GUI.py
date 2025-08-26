@@ -1,6 +1,9 @@
 
-from PyQt6.QtWidgets import QMainWindow, QWidget, QApplication, QHBoxLayout,QVBoxLayout, QPushButton, QRadioButton, QGroupBox,QTabWidget
-
+from tkinter.font import names
+from PyQt6.QtWidgets import (
+    QMainWindow, QWidget, QApplication, QHBoxLayout, QVBoxLayout,
+    QPushButton, QGroupBox, QTabWidget, QComboBox, QLabel, QMessageBox
+)
 from gui.widgets.skeleton_view_widget import SkeletonViewWidget
 from gui.widgets.slider_widget import FrameCountSlider
 from gui.widgets.video_capture_widget import VideoDisplay
@@ -14,8 +17,7 @@ from gui.models.results_container import BalanceAssessmentResultsContainer
 from gui.plots.path_length_line_plot import PathLengthsPlot
 from gui.plots.com_postion_and_velocity_plot import PositionAndVelocityPlot
 
-
-
+from skellymodels.managers.human import Human
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -130,37 +132,101 @@ class MainTab(QWidget):
     def open_folder_dialog(self):
         self.session_folder_path = self.file_manager.get_existing_directory("Choose a session")
 
-        if self.session_folder_path:
+        valid_datasets = self.file_manager.scan_session_for_data(self.session_folder_path)
+        if not valid_datasets:
+            QMessageBox.warning(self, "No datasets found",
+                                "No tidy parquet files were found under this session's 'validation' folder.")
+            # Hide/disable dataset UI
+            self.dataset_selector.clear()
+            self.dataset_selector.setEnabled(False)
+            self.dataset_selector.setVisible(False)
+            self.load_dataset_button.setEnabled(False)
+            return
 
-            if self.freemocap_radio.isChecked():
-                marker_data_array_name = 'mediapipe_body_3d_xyz.npy'
-                markers_to_use = mediapipe_indices
-                path_to_data_folder = self.session_folder_path / 'output_data'
-                self.file_manager.tracker_type = 'freemocap'
-            elif self.qualisys_radio.isChecked():
-                marker_data_array_name = 'qualisys_joint_centers_3d_xyz.npy'
-                markers_to_use = qualisys_indices
-                path_to_data_folder = self.session_folder_path / 'qualisys_data'
-                self.file_manager.tracker_type = 'qualisys'
+        self.dataset_paths = {p.stem: p for p in valid_datasets}
+            # Populate and show the selector
+        names = sorted(self.dataset_paths.keys())
+        self.dataset_selector.blockSignals(True)
+        self.dataset_selector.clear()
+        self.dataset_selector.addItems(names)
+        self.dataset_selector.blockSignals(False)
 
-            self.skel3d_data = self.file_manager.load_skeleton_data(path_to_data_folder, marker_data_array_name)
-            self.build_mediapipe_skeleton(markers_to_use)
+        # Select first by default
+        if names:
+            first = names[0]
+            self.selected_dataset_name = first
+            self.selected_dataset_root = self.dataset_paths[first]
+        else:
+            self.selected_dataset_name = None
+            self.selected_dataset_root = None
 
-            com_data, error_msg = self.file_manager.load_center_of_mass_data(path_to_data_folder)
-            if not error_msg:
-                self.balance_assessment_widget.set_center_of_mass_data(com_data)
-                self.results_container.center_of_mass_xyz = com_data
+        # Reveal controls now that we have something to pick
+        self.dataset_selector.setVisible(True)
+        self.dataset_selector.setEnabled(True)
+        self.load_dataset_button.setEnabled(True)
 
-    def build_mediapipe_skeleton(self, markers_to_use:list):
+    def on_dataset_changed(self, name: str):
+        if not name:
+            return
+        # Update selected dataset pointers
+        self.selected_dataset_name = name
+        self.selected_dataset_root = self.dataset_paths[name]
+        # (Optional) update a status label here if you have one
 
-        self.mediapipe_skeleton = build_skeleton(self.skel3d_data,markers_to_use,mediapipe_connections)
-        self.num_frames = self.skel3d_data.shape[0]
-        self.skeleton_view_widget.reset_skeleton_3d_plot(self.skel3d_data, self.mediapipe_skeleton)
+    def load_dataset_clicked(self):
+        """
+        Entry point after the user has chosen a dataset name from the combo box.
+        This is where you'll plug in your parquet → arrays → viewer + COM wiring.
+        """
+        if not getattr(self, "selected_dataset_root", None):
+            QMessageBox.warning(self, "No dataset selected", "Please choose a dataset to load.")
+            return
+        
+        human:Human = Human.from_data(self.selected_dataset_root)
+
+        if human.body.total_body_com.as_array is not None:
+            human.calculate()
+
+        self.num_frames = human.body.xyz.as_array.shape[0]
+
+        com_data = human.body.total_body_com.as_array
+        self.balance_assessment_widget.set_center_of_mass_data(com_data)
+        self.results_container.center_of_mass_xyz = com_data
+
+        raw_conns = human.body.anatomical_structure.segment_connections
+        connections = self._normalize_connections_to_pairs(raw_conns)
+        self.skeleton_view_widget.reset_skeleton_3d_plot(
+                xyz_array=human.body.xyz.as_array,
+                keypoint_names=human.body.anatomical_structure.landmark_names,
+                connections=connections,
+        )
+        
         self._handle_session_folder_loaded()
     
+    def _normalize_connections_to_pairs(self, segment_connections) -> list[tuple[str, str]]:
+        """
+        Accepts either a dict of {seg: {proximal, distal}} or an iterable of pairs,
+        and returns a clean list of (nameA, nameB) tuples.
+        """
+        if isinstance(segment_connections, dict):
+            pairs = []
+            for v in segment_connections.values():
+                a = v.get("proximal")
+                b = v.get("distal")
+                if a and b:
+                    pairs.append((a, b))
+            return pairs
+        # already pairs or list-like
+        out = []
+        for c in segment_connections:
+            if isinstance(c, (list, tuple)) and len(c) == 2:
+                out.append((c[0], c[1]))
+        return out
+
     def set_session_folder_path(self):
         self.camera_view_widget.video_loader.set_session_folder_path(self.session_folder_path)
-    
+        self.saving_data_widget.set_selected_dataset_folder(self.selected_dataset_root)
+
     def enable_buttons(self):
         self.balance_assessment_widget.run_path_length_analysis_button.setEnabled(True)
         self.camera_view_widget.video_loader.videoLoadButton.setEnabled(True)
@@ -173,19 +239,31 @@ class MainTab(QWidget):
 
     def create_load_session_groupbox(self):
         groupbox = QGroupBox("Load a Session")
-        load_session_layout = QVBoxLayout()
+        layout = QVBoxLayout()
 
-        self.freemocap_radio = QRadioButton('Load FreeMoCap Data')
-        self.freemocap_radio.setChecked(True)
-        load_session_layout.addWidget(self.freemocap_radio)
-        self.qualisys_radio = QRadioButton('Load Qualisys Data')
-        load_session_layout.addWidget(self.qualisys_radio)
-        
-        self.folder_open_button = QPushButton('Load a session folder', self)
+        # 1) Pick session folder
+        self.folder_open_button = QPushButton("Choose session folder", self)
         self.folder_open_button.clicked.connect(self.open_folder_dialog)
-        load_session_layout.addWidget(self.folder_open_button)
-        groupbox.setLayout(load_session_layout)
+        layout.addWidget(self.folder_open_button)
 
+        # 2) Dataset picker (hidden until a session is chosen)
+        row = QHBoxLayout()
+        self.dataset_label = QLabel("Dataset:")
+        self.dataset_selector = QComboBox()
+        self.dataset_selector.setEnabled(False)
+        self.dataset_selector.setVisible(False)
+        self.dataset_selector.currentTextChanged.connect(self.on_dataset_changed)
+        row.addWidget(self.dataset_label)
+        row.addWidget(self.dataset_selector)
+        layout.addLayout(row)
+
+        # 3) Load selected dataset
+        self.load_dataset_button = QPushButton("Load selected dataset")
+        self.load_dataset_button.setEnabled(False)
+        self.load_dataset_button.clicked.connect(self.load_dataset_clicked)
+        layout.addWidget(self.load_dataset_button)
+
+        groupbox.setLayout(layout)
         return groupbox
     
     def create_skeleton_viewer_groupbox(self):
@@ -231,7 +309,7 @@ class MainTab(QWidget):
     def create_saving_data_groupbox(self):
         groupbox = QGroupBox("Save Data")
         layout = QVBoxLayout()
-        self.saving_data_widget = SavingDataAnalysisWidget(self.file_manager, self.results_container)
+        self.saving_data_widget = SavingDataAnalysisWidget(self.results_container)
         layout.addWidget(self.saving_data_widget)
         groupbox.setLayout(layout)
         return groupbox

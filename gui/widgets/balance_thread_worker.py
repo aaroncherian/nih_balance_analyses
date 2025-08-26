@@ -106,7 +106,7 @@ class BalanceAssessmentWorkerThread(threading.Thread):
             start_frame, end_frame = frames
             
             # Extract positions for each dimension separately and store in a list
-            position_data = [self.com_data[start_frame:end_frame, i] for i in range(3)]
+            position_data = [self.com_data[start_frame:end_frame, 0, i] for i in range(3)]
             position_dictionary[condition] = position_data
         return True, position_dictionary
 

@@ -18,6 +18,8 @@ class PathLengthCalculator():
         return normalized_path_length
 
     def calculate_distance(self, point1, point2):
+        point1 = point1[0]
+        point2 = point2[0]
         return np.sqrt((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2 + (point1[2]-point2[2])**2)
 
     def get_path_length(self,num_frame_range):
@@ -29,7 +31,6 @@ class PathLengthCalculator():
         sliced_freemocap_data = self.slice_data(self.freemocap_data,num_frame_range)
         velocity_data = []
 
-        for dimension in range(3):
-            velocity_data.append(np.diff(sliced_freemocap_data[:,dimension]))
+        velocity_data = np.diff(sliced_freemocap_data, axis=0)
 
         return velocity_data 

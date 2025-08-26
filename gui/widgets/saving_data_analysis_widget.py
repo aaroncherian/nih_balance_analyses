@@ -9,11 +9,11 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QLineEdit, QPushButton,
 
 
 class SavingDataAnalysisWidget(QWidget):
-    def __init__(self, file_manager, results_container):
+    def __init__(self, results_container):
         super().__init__()
 
         self.results_container = results_container
-        self.file_manager = file_manager
+        self.selected_dataset_folder = None
         self._init_ui()
         
     def _init_ui(self):
@@ -50,6 +50,7 @@ class SavingDataAnalysisWidget(QWidget):
         dataframes = []
 
         for condition, arrays in data_dict.items():
+            arrays = np.squeeze(arrays)
             for dimension, arr in zip(['x', 'y', 'z'], arrays):
                 temp_df = pd.DataFrame({f"{condition}_{dimension}": arr})
                 dataframes.append(temp_df)
@@ -61,8 +62,8 @@ class SavingDataAnalysisWidget(QWidget):
 
     def _create_folder_to_save_data(self, saved_folder_name):
         """Create a folder to save the data."""
-        saved_data_analysis_path = (self.file_manager.session_folder_path / 
-                                    'data_analysis' / f'{self.file_manager.tracker_type}_analysis'/saved_folder_name)
+        saved_data_analysis_path = (self.selected_dataset_folder / 
+                                    'path_length_analysis' / saved_folder_name)
         saved_data_analysis_path.mkdir(parents=True, exist_ok=True)
         return saved_data_analysis_path
 
@@ -107,3 +108,6 @@ class SavingDataAnalysisWidget(QWidget):
         position_dataframe = self._create_dataframe_from_dict(position_dict)
         position_dataframe.to_csv(save_folder_path / 'condition_positions.csv', 
                                   index=False)
+        
+    def set_selected_dataset_folder(self, folder_path: Path):
+        self.selected_dataset_folder = folder_path

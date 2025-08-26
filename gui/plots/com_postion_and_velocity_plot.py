@@ -57,22 +57,22 @@ class PositionAndVelocityPlot(QWidget):
         ax4 = self.figure.add_subplot(2, 2, 4)
 
         # Plot X Position
-        ax1.plot(com_position[:, 0], color='blue')
+        ax1.plot(com_position[:, :, 0], color='blue')
         ax1.set_title('COM X Position')
         ax1.set_ylabel('Position (units)')
 
         # Plot Y Position
-        ax2.plot(com_position[:, 1], color='green')
+        ax2.plot(com_position[:, :, 1], color='green')
         ax2.set_title('COM Y Position')
 
         # Plot X Velocity
-        ax3.plot(com_velocity[:, 0], color='blue')
+        ax3.plot(com_velocity[:, :, 0], color='blue')
         ax3.set_title('COM X Velocity')
         ax3.set_ylabel('Velocity (units/s)')
         ax3.set_xlabel('Frame #')
 
         # Plot Y Velocity
-        ax4.plot(com_velocity[:, 1], color='green')
+        ax4.plot(com_velocity[:, :, 1], color='green')
         ax4.set_title('COM Y Velocity')
         ax4.set_xlabel('Frame #')
 

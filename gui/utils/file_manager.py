@@ -5,19 +5,14 @@ from gui.utils.mediapipe_skeleton_builder import mediapipe_indices, qualisys_ind
 
 class FileManager:
     def __init__(self):
-        self.data_options = {
-            "freemocap": {
-                "marker_data_array_name": "mediapipe_body_3d_xyz.npy",
-                "markers_to_use": mediapipe_indices
-            },
-            "qualisys": {
-                "marker_data_array_name": "clipped_qualisys_skel_3d.npy",
-                "markers_to_use": qualisys_indices
-            }
-        }
-        
         self.session_folder_path = None
-        self.tracker_type = None
+
+    def scan_session_for_data(self, session_folder_path: str|Path):
+        session_folder_path = Path(session_folder_path)
+        path_to_validation_folder = session_folder_path / 'validation'
+
+        valid_datasets = [f for f in path_to_validation_folder.iterdir() if f.is_dir() and any(f.glob("*.parquet"))]
+        return valid_datasets
 
     def get_existing_directory(self, dialog_title="Choose a session"):
         folder_diag = QFileDialog()
@@ -29,15 +24,3 @@ class FileManager:
         skeleton_data_folder_path = data_folder_path / marker_data_array_name
         return np.load(skeleton_data_folder_path)
     
-    
-    def load_center_of_mass_data(self, session_folder_path):
-        """Load the center of mass data from the given session folder path."""
-        try:
-            path_to_total_body_COM_data = session_folder_path / 'center_of_mass' / 'total_body_center_of_mass_xyz.npy'
-            total_body_COM_data = np.load(path_to_total_body_COM_data)
-            return total_body_COM_data, None  # Return the data and None for error message
-        except Exception as e:
-            return None, str(e)  # Return None for data and the error message
-
-    def get_data_option(self, option_name):
-        return self.data_options.get(option_name)
