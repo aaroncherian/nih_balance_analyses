@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
 
-matplotlib.use("Qt5Agg")
+# matplotlib.use("Qt5Agg")
 
-path_to_freemocap_analysis_folder = Path(r'D:\2023-05-17_MDN_NIH_data\1.0_recordings\calib_3\sesh_2023-05-17_14_53_48_MDN_NIH_Trial3\data_analysis\analysis_2023-06-01_10_12_24')
-path_to_qualisys_analysis_folder = Path(r'D:\2023-05-17_MDN_NIH_data\1.0_recordings\calib_3\qualisys_MDN_NIH_Trial3\data_analysis\analysis_2023-06-01_17_14_40')
+path_to_freemocap_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\mediapipe\path_length_analysis\analysis_2025-08-26_11_40_15')
+path_to_qualisys_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\qualisys\path_length_analysis\analysis_2025-08-26_14_02_17')
 
 # Colors for FreeMoCap and Qualisys
 colors = {'freemocap': '#014E9C', 'qualisys': '#BE4302'}

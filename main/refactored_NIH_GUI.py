@@ -184,7 +184,7 @@ class MainTab(QWidget):
         
         human:Human = Human.from_data(self.selected_dataset_root)
 
-        if human.body.total_body_com.as_array is not None:
+        if human.body.total_body_com is None:
             human.calculate()
 
         self.num_frames = human.body.xyz.as_array.shape[0]

@@ -80,17 +80,12 @@ class BalanceAssessmentWorkerThread(threading.Thread):
         return True, path_length_dictionary
 
     def calculate_velocities(self):
-        """
-        Calculate the velocities for each condition.
-
-        Returns:
-            tuple: A tuple containing a boolean indicating successful completion and dictionary of the center of mass velocity values during each condition.
-        """
         velocity_dictionary = {}
         for condition, frames in self.condition_frames_dictionary.items():
-            frame_range = range(frames[0], frames[1])
-            velocity_dictionary[condition] = self.path_length_calculator.calculate_velocity(frame_range)
-
+            frame_range = range(frames[0], frames[1])  # note: end exclusive
+            vel = self.path_length_calculator.calculate_velocity(frame_range)  # (n_frames, 1, 3)
+            vel = np.squeeze(vel, axis=1)  # -> (n_frames, 3)
+            velocity_dictionary[condition] = [vel[:, 0], vel[:, 1], vel[:, 2]]
         return True, velocity_dictionary
     
     def splice_positions_by_condition(self):

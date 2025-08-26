@@ -2,10 +2,12 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from pathlib import Path
+import plotly.io as pio
 
+pio.renderers.default = "browser"   # put this once near the top
 # Paths
-path_to_freemocap_analysis_folder = Path(r'D:\2024-04-25_P01\1.0_recordings\sesh_2024-04-25_14_45_59_P01_NIH_Trial1\data_analysis\freemocap_analysis\analysis_2024-05-14_10_59_10')
-path_to_qualisys_analysis_folder = Path(r'D:\2024-04-25_P01\1.0_recordings\sesh_2024-04-25_14_45_59_P01_NIH_Trial1\data_analysis\qualisys_analysis\analysis_2024-05-14_09_55_22')
+path_to_freemocap_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\mediapipe\path_length_analysis\analysis_2025-08-26_14_22_00')
+path_to_qualisys_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\qualisys\path_length_analysis\analysis_2025-08-26_14_22_00')
 
 # Colors
 colors = {'freemocap': '#014E9C', 'qualisys': '#BE4302'}
@@ -73,4 +75,5 @@ for dimension in ['x', 'y', 'z']:
 
     fig.show()
 
-    # fig.write_html(str(rf'C:\Users\aaron\Documents\GitHub\nih_balance_analyses\docs\images\split_violin_{dimension}.html'), full_html=False, include_plotlyjs='cdn')
+    fig.write_html(str(path_to_freemocap_analysis_folder/f'split_violin_{dimension}.html'), full_html=False, include_plotlyjs='cdn')
+    fig.write_image(str(path_to_freemocap_analysis_folder/f'split_violin_{dimension}.png'))
