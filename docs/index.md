@@ -48,4 +48,12 @@ The NIH SBT is an assessment tool designed to evaluate an individual’s postura
 
 In a typical assessment, an accelerometer (usually an iPhone) is worn around the participant's waist. The accelerometer measures postural sway, which is then converted into a number of NIH scores that represent overall balance ability 
 
-[Open the interactive demo](back_demo)
+[Open the interactive demo](treadmill/skeleton_3d_plot)
+[open back](back_demo)
+
+<iframe
+  src = "./treadmill/skeleton_3d_plot/index.html",
+  style="width:100%; height:80vh; border:none;"
+  allowfullscreen
+  loading="lazy">
+</iframe>
