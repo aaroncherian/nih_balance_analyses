@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>3D Markers Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html,body { margin:0; height:100% }
+    /* Simple two-row layout: scene on top, plots below */
+    #wrap { display:flex; flex-direction:column; height:100% }
+    #scene { flex: 1 1 auto; border-top:1px solid #eee; min-height: 50vh }
+    #hud  { position:absolute; top:8px; left:8px; background:#fff; padding:6px 10px;
+            border-radius:6px; font-family:system-ui; font-size:14px;
+            box-shadow:0 0 4px rgba(0,0,0,0.1); display:flex; gap:8px; align-items:center; }
+    #plots { flex: 0 0 auto; padding: 12px; display:grid; grid-template-columns: 1fr; gap:12px }
+    @media (min-width: 1100px){ #plots { grid-template-columns: 1fr 1fr } }
+    .plot { height: 300px; }
+  </style>
+
+  <!-- Three.js import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.33.0.min.js"></script>
+</head>
+<body>
+  <div id="wrap">
+    <div id="scene"></div>
+    <div id="hud"></div>
+    <div id="plots">
+      <div id="inclination" class="plot"></div>
+      <div id="rotation" class="plot"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { MarkerViewer } from './viewer.js';
+    import { initPlots } from './plots.js';
+
+    const viewer = new MarkerViewer({
+      sceneEl: '#scene',
+      hudEl: '#hud',
+      dataUrl: 'data.json',
+      scale: 0.001,
+      fps: 30,
+      loop: true,
+      // Will be called whenever frame changes (slider or playback)
+      onFrameChange: (k) => {
+        window.updatePlotCursors?.(k);   // provided by plots.js
+      },
+      // NEW: will be called once data.json has loaded
+      onDataLoaded: (data) => {
+        initPlots(data);                 // build plots once we have arrays
+      }
+    });
+
+    // (Optional) for console debugging
+    window.viewer = viewer;
+  </script>
+</body>
+</html>

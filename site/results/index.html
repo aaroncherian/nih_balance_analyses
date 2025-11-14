@@ -4,28 +4,28 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
         
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>Freemocap/NIH Balance Analysis Documentation</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/fontawesome.min.css" rel="stylesheet">
-        <link href="css/brands.min.css" rel="stylesheet">
-        <link href="css/solid.min.css" rel="stylesheet">
-        <link href="css/v4-font-face.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Results - Freemocap/NIH Balance Analysis Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/color-brewer.min.css" >
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
-        <link href="css/custom.css" rel="stylesheet">
+        <link href="../css/custom.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href=".">Freemocap/NIH Balance Analysis Documentation</a>
+                <a class="navbar-brand" href="..">Freemocap/NIH Balance Analysis Documentation</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -36,13 +36,13 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="." class="nav-link active" aria-current="page">Home</a>
+                                <a href=".." class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="methods/" class="nav-link">Methods</a>
+                                <a href="../methods/" class="nav-link">Methods</a>
                             </li>
                             <li class="nav-item">
-                                <a href="results/" class="nav-link">Results</a>
+                                <a href="./" class="nav-link active" aria-current="page">Results</a>
                             </li>
                         </ul>
 
@@ -53,17 +53,17 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
+                                <a rel="prev" href="../methods/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="methods/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/aaroncherian/nih_balance_analyses/edit/master/docs/index.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/aaroncherian/nih_balance_analyses/edit/master/docs/results.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -83,12 +83,8 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#analyzing-static-balance-with-freemocap" class="nav-link">Analyzing Static Balance with FreeMoCap</a>
+            <li class="nav-item" data-bs-level="2"><a href="#results" class="nav-link">Results</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#overview" class="nav-link">Overview</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
@@ -96,48 +92,27 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="analyzing-static-balance-with-freemocap">Analyzing Static Balance with FreeMoCap</h1>
-<p>This page documents our validation of the FreeMoCap system on the NIH Balance Assessment. </p>
-<video width="300" height="550" controls>
-  <source src="images/video_eo_fg.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
+<h2 id="results">Results</h2>
+<h3 id="center-of-mass-dispersion">Center of mass dispersion</h3>
+<p>The 2d ground plane projection of the center of mass shows increased dispersion during progressively harder stances.</p>
+<iframe width="650" height="650" frameborder="0" scrolling="no" src="../images/com_dispersion_plots.html" ></iframe>
 
-<h2 id="overview">Overview</h2>
-<p>Patient balance and progress in rehabilitation is often measured using comprehensive  <strong>qualitative</strong> assessments. However, these tests 
-tend to be <strong>subjective</strong> and may not be responsive to small changes in a patient. The ability to capture human movement data while 
-performing these clinical assessments could provide clinicians with quantitative, standardized insight into patient movement 
-capability. </p>
-<p>FreeMoCap is an <strong>open-source, low-cost, markerless motion capture system</strong> that leverages advancements in 
-computer vision and machine learning to capture human movement data without specialized equipment.</p>
-<p>To validate the suitability of FreeMoCap as a clinical assessment tool, we record participants performing the NIH Standing Balance Test (SBT). 
-We then compare center of mass (COM) derived parameters based on 3D pose estimation from FreeMoCap to both 3D estimates from 
-Qualisys, a marker-based system, and to the outcomes reported by the NIH BalancePod app. </p>
-<h3 id="existing-technology-and-limitations">Existing Technology and Limitations</h3>
-<p>Systems such as marker-based motion capture and force plates can provide highly accurate data, but they are extremely expensive and require specialized equipment, which often restricts their use to the laboratory environment. On the other hand, accelerometers are affordable and can be used to track real-world activities, but are limited in the information that they can provide about body position and orientation.</p>
-<p>As such, there is a need for a <strong>low-cost, accessible tool that could augment current rehabilitation practices by providing a comprehensive human movement data of a patient</strong></p>
-<h3 id="the-freemotioncapture-project-freemocap">The FreeMotionCapture Project (FreeMoCap)</h3>
-<p>FreeMoCap is an open-source, free, markerless motion capture system that leverages advancements in computer vision and machine learning to capture human movement data without specialized equipment.</p>
-<p>insert all things about freemocap here</p>
-<h3 id="aim">Aim</h3>
-<p>Validate the Free Motion Capture Project (FreeMoCap), on a clinical balance assessment: the NIH Standing Balance Test (SBT)</p>
-<h3 id="the-nih-standing-balance-test-sbt">The NIH Standing Balance Test (SBT)</h3>
-<p>The NIH SBT is an assessment tool designed to evaluate an individual’s postural stability and balance. Participants stand feet together, and are asked to stand as still as possible for 50s under increasingly difficult conditions. These conditions include:</p>
-<p>1) Standing with eyes <strong>open</strong> on <strong>solid ground</strong> <br>
-2) Standing with eyes <strong>closed</strong> on <strong>solid ground</strong> <br>
-3) Standing with eyes <strong>open</strong> on a <strong>foam pad</strong> <br>
-4) Standing with eyes <strong>closed</strong> on a <strong>foam pad</strong> <br></p>
-<p>In a typical assessment, an accelerometer (usually an iPhone) is worn around the participant's waist. The accelerometer measures postural sway, which is then converted into a number of NIH scores that represent overall balance ability </p>
-<p><a href="treadmill/skeleton_3d_plot">Open the interactive demo</a>
-<a href="back_demo">open back</a></p>
-<p><a href="samples/test_data">open sample</a></p>
-<p><iframe
-  src = "./treadmill/skeleton_3d_plot/index.html",
-  style="width:100%; height:80vh; border:none;"
-  allowfullscreen
-  loading="lazy">
-</iframe>
-</p></div>
+<h3 id="normalized-path-length">Normalized path length</h3>
+<p>Center of mass path length shows a generally increasing trend across stances.</p>
+<iframe width="700" height="650" frameborder="0" scrolling="no" src='../images/path_length_line_plots.html'> </iframe>
+
+<h3 id="nih-toolbox-ratio">NIH Toolbox Ratio</h3>
+<p>The NIH Toolbox app compares the Eyes Closed, Solid Ground condition to the Eyes Closed, Foam Pad condition by providing the ratio of each of these scores over the Eyes Open, Solid Ground condition score as a baseline. The closer the ratio is to 1, the less postural sway the subject was showing. </p>
+<iframe width="700" height="650" frameborder="0" scrolling="no" src='../images/nih_ratio_plots.html'> </iframe>
+
+<h3 id="com-position-and-velocity">COM Position and Velocity</h3>
+<p>COM position and velocity can also be plotted for an individual trial.</p>
+<iframe width="1000" height="800" frameborder="0" scrolling="no" src='../images/com_position_and_velocity.html'> </iframe>
+
+<h3 id="com-velocity-distribution">COM Velocity Distribution</h3>
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_x.html'> </iframe>
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_y.html'> </iframe>
+<iframe width="1100" height="800" frameborder="0" scrolling="no" src='../images/split_violin_z.html'> </iframe></div>
             </div>
         </div>
 
@@ -145,13 +120,13 @@ Qualisys, a marker-based system, and to the outcomes reported by the NIH Balance
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
-            var base_url = ".",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js"></script>
-        <script src="search/main.js"></script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -216,8 +191,3 @@ Qualisys, a marker-based system, and to the outcomes reported by the NIH Balance
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-11-14 03:26:10.173136+00:00
--->

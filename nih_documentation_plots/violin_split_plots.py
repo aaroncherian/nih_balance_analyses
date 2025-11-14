@@ -6,8 +6,8 @@ import plotly.io as pio
 
 pio.renderers.default = "browser"   # put this once near the top
 # Paths
-path_to_freemocap_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\mediapipe\path_length_analysis\analysis_2025-08-26_14_22_00')
-path_to_qualisys_analysis_folder = Path(r'D:\2025_07_31_JSM_pilot\freemocap\2025-07-31_16-00-42_GMT-4_jsm_nih_trial_1\validation\qualisys\path_length_analysis\analysis_2025-08-26_14_22_00')
+path_to_freemocap_analysis_folder = Path(r"D:\2025_09_03_OKK\freemocap\2025-09-03_14-38-45_GMT-4_okk_nih_2\validation\mediapipe\path_length_analysis\analysis_2025-09-04_13_58_46_rigid")
+path_to_qualisys_analysis_folder = Path(r"D:\2025_09_03_OKK\freemocap\2025-09-03_14-38-45_GMT-4_okk_nih_2\validation\qualisys\path_length_analysis\analysis_2025-09-04_13_58_46")
 
 # Colors
 colors = {'freemocap': '#014E9C', 'qualisys': '#BE4302'}

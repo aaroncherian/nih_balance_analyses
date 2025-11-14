@@ -51,6 +51,8 @@ In a typical assessment, an accelerometer (usually an iPhone) is worn around the
 [Open the interactive demo](treadmill/skeleton_3d_plot)
 [open back](back_demo)
 
+[open sample](samples/test_data)
+
 <iframe
   src = "./treadmill/skeleton_3d_plot/index.html",
   style="width:100%; height:80vh; border:none;"
