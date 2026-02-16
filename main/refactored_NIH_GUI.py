@@ -131,6 +131,7 @@ class MainTab(QWidget):
 
     def open_folder_dialog(self):
         self.session_folder_path = self.file_manager.get_existing_directory("Choose a session")
+        self.frame_marking_widget.set_data_path(self.session_folder_path)
 
         valid_datasets = self.file_manager.scan_session_for_data(self.session_folder_path)
         if not valid_datasets:

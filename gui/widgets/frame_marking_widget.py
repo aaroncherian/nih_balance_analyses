@@ -33,6 +33,9 @@ class FrameMarker(QWidget):
         self.saved_conditions_table = self.create_conditions_table()
         self._layout.addWidget(self.saved_conditions_table)
 
+    def set_data_path(self, recording_folder_path):
+        self.recording_folder_path = recording_folder_path
+
     def create_conditions_layout(self):
         """Create and return the conditions layout."""
         conditions_layout = QVBoxLayout()
@@ -112,7 +115,7 @@ class FrameMarker(QWidget):
         self.conditions_dict_updated_signal.emit()
 
     def load_conditions(self):
-        self.condition_json, _ = QFileDialog.getOpenFileName(self, "Select JSON file", "", "JSON Files (*.json)")
+        self.condition_json, _ = QFileDialog.getOpenFileName(self, "Select JSON file", str(self.recording_folder_path) if self.recording_folder_path else "", "JSON Files (*.json)")
 
         if self.condition_json:
             with open(self.condition_json, 'r') as json_file:
