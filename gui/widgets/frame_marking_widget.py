@@ -115,7 +115,7 @@ class FrameMarker(QWidget):
         self.conditions_dict_updated_signal.emit()
 
     def load_conditions(self):
-        self.condition_json, _ = QFileDialog.getOpenFileName(self, "Select JSON file", str(self.recording_folder_path) if self.recording_folder_path else "", "JSON Files (*.json)")
+        self.condition_json, _ = QFileDialog.getOpenFileName(self, "Select JSON file", str(self.recording_folder_path/"validation"/"qualisys"/"path_length_analysis") if self.recording_folder_path else "", "JSON Files (*.json)")
 
         if self.condition_json:
             with open(self.condition_json, 'r') as json_file:
