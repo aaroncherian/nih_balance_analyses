@@ -13,13 +13,10 @@ class PathLengthCalculator():
         return sliced_freemocap_data
 
     def calculate_path_length(self, sliced_freemocap_data):
-        path_length = 0
-        for frame_number in range(1,len(sliced_freemocap_data)):
-            path_length += self.calculate_distance(sliced_freemocap_data[frame_number-1],sliced_freemocap_data[frame_number])
-
+        diffs = np.diff(sliced_freemocap_data, axis=0)
+        path_length = np.sum(np.linalg.norm(diffs, axis=-1))
         duration_seconds = (len(sliced_freemocap_data) - 1) / self.sampling_rate
-        normalized_path_length = path_length/duration_seconds
-        return normalized_path_length
+        return path_length / duration_seconds
 
     def calculate_distance(self, point1, point2):
         point1 = point1[0]
