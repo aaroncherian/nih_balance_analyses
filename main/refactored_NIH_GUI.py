@@ -178,17 +178,16 @@ class MainTab(QWidget):
         """
         Entry point after the user has chosen a dataset name from the combo box.
         This is where you'll plug in your parquet → arrays → viewer + COM wiring.
-        """
+        """ 
         if not getattr(self, "selected_dataset_root", None):
             QMessageBox.warning(self, "No dataset selected", "Please choose a dataset to load.")
             return
         
         human:Human = Human.from_data(self.selected_dataset_root)
 
-        if human.body.total_body_com is None:
-            human.calculate()
+        human.calculate()
 
-        self.num_frames = human.body.xyz.as_array.shape[0]
+        self.num_frames = human.body.rigid_xyz.as_array.shape[0] if human.body.rigid_xyz is not None else human.body.xyz.as_array.shape[0]
 
         com_data = human.body.total_body_com.as_array
         self.balance_assessment_widget.set_center_of_mass_data(com_data)
