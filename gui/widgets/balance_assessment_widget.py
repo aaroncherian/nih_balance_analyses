@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget,QVBoxLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import QWidget,QVBoxLayout, QPushButton, QLabel, QLineEdit
 from gui.widgets.balance_thread_worker import BalanceAssessmentWorkerThread
 
 from PyQt6.QtCore import pyqtSignal
@@ -18,9 +18,13 @@ class BalanceAssessmentWidget(QWidget):
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
 
+        self.sampling_rate_label: QLabel = QLabel("Sampling Rate:")
+        self.sampling_rate_input: QLineEdit = QLineEdit("30")  # Placeholder for sampling rate input
         self.run_path_length_analysis_button = QPushButton('Run balance assessment')
         self.run_path_length_analysis_button.clicked.connect(self.run_COM_analysis)
         self.run_path_length_analysis_button.setEnabled(False)
+        self._layout.addWidget(self.sampling_rate_label)
+        self._layout.addWidget(self.sampling_rate_input)
         self._layout.addWidget(self.run_path_length_analysis_button)
 
         self.path_length_results = QLabel()
@@ -39,6 +43,7 @@ class BalanceAssessmentWidget(QWidget):
 
         self.balance_assessment_worker = BalanceAssessmentWorkerThread(
             com_data=self.total_body_COM_data,
+            sampling_rate=float(self.sampling_rate_input.text()),
             condition_frames_dictionary=self.balance_results_container.condition_frame_dictionary,
             task_list=task_list,
             all_tasks_finished_callback=self.on_balance_assessment_completed

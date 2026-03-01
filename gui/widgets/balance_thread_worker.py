@@ -18,7 +18,8 @@ class BalanceAssessmentWorkerThread(threading.Thread):
     """
 
     def __init__(self, 
-                 com_data: np.ndarray, 
+                 com_data: np.ndarray,
+                 sampling_rate: float, 
                  condition_frames_dictionary: dict, 
                  task_list: list,
                  task_running_callback=None, 
@@ -29,7 +30,7 @@ class BalanceAssessmentWorkerThread(threading.Thread):
 
         self.com_data = com_data
         self.condition_frames_dictionary = condition_frames_dictionary
-        self.path_length_calculator = path_length_calculator.PathLengthCalculator(self.com_data)
+        self.path_length_calculator = path_length_calculator.PathLengthCalculator(self.com_data, sampling_rate=sampling_rate)
 
         self.available_tasks = {
             'calculate_path_lengths': self.calculate_path_lengths,

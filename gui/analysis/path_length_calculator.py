@@ -2,8 +2,11 @@ import numpy as np
 
 class PathLengthCalculator():
 
-    def __init__(self,freemocap_data:np.ndarray):
+    def __init__(self,
+                 freemocap_data:np.ndarray,
+                 sampling_rate:float = 30):
         self.freemocap_data = freemocap_data
+        self.sampling_rate = sampling_rate
 
     def slice_data(self, freemocap_data, num_frame_range):
         sliced_freemocap_data = freemocap_data[num_frame_range[0]:num_frame_range[-1],:]
@@ -14,7 +17,8 @@ class PathLengthCalculator():
         for frame_number in range(1,len(sliced_freemocap_data)):
             path_length += self.calculate_distance(sliced_freemocap_data[frame_number-1],sliced_freemocap_data[frame_number])
 
-        normalized_path_length = path_length/len(sliced_freemocap_data)
+        duration_seconds = len(sliced_freemocap_data) / self.sampling_rate
+        normalized_path_length = path_length/duration_seconds
         return normalized_path_length
 
     def calculate_distance(self, point1, point2):
