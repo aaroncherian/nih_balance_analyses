@@ -76,7 +76,8 @@ def load_com_data(tracker_folder: Path) -> np.ndarray:
     calculate derived quantities, and return the total-body COM array.
     """
     human:Human = Human.from_data(tracker_folder)
-    human.calculate()
+    if human.body.total_body_com is None:
+        human.calculate()
     com_data = human.body.total_body_com.as_array
     logger.info(f"  Loaded COM data with shape {com_data.shape} from {tracker_folder.name}")
     return com_data
