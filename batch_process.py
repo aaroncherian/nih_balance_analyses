@@ -213,7 +213,7 @@ def run_batch_analysis(
 
     # 3. Timestamp for this batch run
     timestamp = datetime.datetime.now().strftime("analysis_%Y-%m-%d_%H_%M_%S")
-
+    folder_name = "analysis_manuscript"
     # 4. Process each tracker
     for tracker_folder in tracker_folders:
         if skip_qualisys and tracker_folder.name == "qualisys":
@@ -221,11 +221,11 @@ def run_batch_analysis(
             continue
 
         logger.info(f"Processing: {tracker_folder.name}")
-
+    
         try:
             com_data = load_com_data(tracker_folder)
             results = run_analysis_for_tracker(com_data, condition_frame_dict, sampling_rate)
-            save_results(tracker_folder, condition_frame_dict, results, timestamp)
+            save_results(tracker_folder, condition_frame_dict, results, folder_name)
         except Exception as e:
             logger.error(f"  Failed on {tracker_folder.name}: {e}")
             continue
@@ -248,7 +248,10 @@ if __name__ == "__main__":
         r"D:\validation\data\2026_01_26_KK\2026-01-16_13-41-17_GMT-5_kk_nih_1",
         r"D:\validation\data\2026_01_26_KK\2026-01-16_13-58-41_GMT-5_kk_nih_2",
         r"D:\validation\data\2026-01-30-JTM\2026-01-30_10-40-03_GMT-5_JTM_nih_1",
-        r"D:\validation\data\2026-01-30-JTM\2026-01-30_10-57-13_GMT-5_JTM_nih_2"
+        r"D:\validation\data\2026-01-30-JTM\2026-01-30_10-57-13_GMT-5_JTM_nih_2",
+        r"D:\validation\data\2026_03_04_ML\2026-03-04_19-12-07_GMT-5_ml_nih_trial_1",
+        r"D:\validation\data\2026_03_04_ML\2026-03-04_19-27-37_GMT-5_ml_nih_trial_2"
+
     ]
     for session_folder in session_folder_list:
         run_batch_analysis(Path(session_folder), sampling_rate=30.0, skip_qualisys=False)
